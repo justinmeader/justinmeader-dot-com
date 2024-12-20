@@ -17,9 +17,12 @@ export function transformWordPressPost(post: WordPressPost): TransformedPost {
       draft: false
     },
     render: async () => ({
-      Content: () => post.content,
+      Content: function() {
+        return post.content;
+      },
       headings: [],
-      remarkPluginFrontmatter: {}
+      remarkPluginFrontmatter: {},
+      isAstroComponentFactory: true
     })
   };
 }
