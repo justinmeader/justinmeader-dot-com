@@ -16,13 +16,22 @@ export function transformWordPressPost(post: WordPressPost): TransformedPost {
       tags: post.tags?.nodes.map((tag) => tag.name) || [],
       draft: false
     },
-    render: async () => ({
-      Content: function() {
-        return post.content;
-      },
-      headings: [],
-      remarkPluginFrontmatter: {},
-      isAstroComponentFactory: true
-    })
+    render: async () => {
+      const Component = () => {
+        return {
+          type: 'text',
+          props: {
+            'set:html': post.content
+          }
+        };
+      };
+      Component.isAstroComponentFactory = true;
+      
+      return {
+        Content: Component,
+        headings: [],
+        remarkPluginFrontmatter: {}
+      };
+    }
   };
 }
