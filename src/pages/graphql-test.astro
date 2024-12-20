@@ -1,54 +1,35 @@
 ---
-import { gql, GraphQLClient } from 'graphql-request';
+import PageLayout from "@layouts/PageLayout.astro"
+import { getAllPosts } from "@lib/wordpress"
+import { transformWordPressPost } from "@lib/transformers"
+import type { TransformedPost } from "@lib/transformers"
 
-const endpoint = 'http://justinmeader.local/graphql';
-const graphQLClient = new GraphQLClient(endpoint);
-
-const query = gql`
-  query GetPosts {
-    posts(first: 5, where: {status: PUBLISH}) {
-      nodes {
-        id
-        title
-        slug
-        excerpt
-        content
-        date
-        featuredImage {
-          node {
-            sourceUrl
-          }
-        }
-        author {
-          node {
-            name
-          }
-        }
-      }
-    }
-  }
-`;
-
-let posts = [];
+let posts: TransformedPost[] = [];
+let error: string | null = null;
 
 try {
-  const data = await graphQLClient.request(query);
-  posts = data.posts.nodes;
-} catch (error) {
-  console.error('Error fetching data:', error);
+  const wpPosts = await getAllPosts();
+  posts = wpPosts.map(transformWordPressPost);
+} catch (e) {
+  error = e instanceof Error ? e.message : 'Failed to load posts';
 }
 ---
 
-<h1>Test GraphQL Connection</h1>
-<ul>
-  {posts.map(post => (
-    <li key={post.id}>
-      <h2>{post.title}</h2>
-      <p>
-        <strong>By:</strong> {post.author?.node?.name} on {new Date(post.date).toLocaleDateString()}
-      </p>
-      <img src={post.featuredImage?.node?.sourceUrl} alt={post.title} />
-      <p dangerouslySetInnerHTML={{ __html: post.excerpt }}></p>
-    </li>
-  ))}
-</ul>
+<PageLayout title="GraphQL Test" description="Testing GraphQL integration">
+  <div class="p-4">
+    <h1 class="text-2xl font-bold mb-4">WordPress Posts</h1>
+    
+    {error ? (
+      <div class="text-red-500">{error}</div>
+    ) : (
+      <ul class="space-y-4">
+        {posts.map((post) => (
+          <li class="border p-4 rounded">
+            <h2 class="text-xl font-semibold">{post.data.title}</h2>
+            <div set:html={post.data.summary} />
+          </li>
+        ))}
+      </ul>
+    )}
+  </div>
+</PageLayout>

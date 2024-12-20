@@ -1,5 +1,5 @@
-import type { WordPressPost, WordPressResponse } from '@types/wordpress';
-import client from './client';
+import type { WordPressPost, WordPressResponse, WordPressPostResponse } from '@types/wordpress';
+import { client } from './client';
 import { GET_ALL_POSTS, GET_POST_BY_SLUG } from './queries';
 
 export async function getAllPosts(): Promise<WordPressPost[]> {
@@ -14,7 +14,7 @@ export async function getAllPosts(): Promise<WordPressPost[]> {
 
 export async function getPostBySlug(slug: string): Promise<WordPressPost | null> {
   try {
-    const data = await client.request(GET_POST_BY_SLUG, { slug });
+    const data = await client.request<WordPressPostResponse>(GET_POST_BY_SLUG, { slug });
     return data.post;
   } catch (error) {
     console.error('Error fetching post:', error);

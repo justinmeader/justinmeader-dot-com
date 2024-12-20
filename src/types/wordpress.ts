@@ -17,12 +17,24 @@ export interface WordPressPost {
   content: string;
   excerpt: string;
   date: string;
-  featuredImage?: WordPressImage;
-  tags?: WordPressTag;
+  featuredImage?: {
+    node: {
+      sourceUrl: string;
+    };
+  };
+  tags?: {
+    nodes: {
+      name: string;
+    }[];
+  };
 }
 
 export interface WordPressResponse {
   posts: {
     nodes: WordPressPost[];
   };
+}
+
+export interface WordPressPostResponse {
+  post: WordPressPost;
 }

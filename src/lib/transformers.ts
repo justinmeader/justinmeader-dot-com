@@ -1,4 +1,4 @@
-import type { Post } from './wordpress';
+import type { WordPressPost } from '@types/wordpress';
 
 export interface TransformedPost {
   slug: string;
@@ -13,7 +13,7 @@ export interface TransformedPost {
   body: string;
 }
 
-export function transformWordPressPost(post: Post): TransformedPost {
+export function transformWordPressPost(post: WordPressPost): TransformedPost {
   return {
     slug: post.slug,
     collection: 'blog',
@@ -21,7 +21,7 @@ export function transformWordPressPost(post: Post): TransformedPost {
       title: post.title,
       summary: post.excerpt.replace(/(<([^>]+)>)/gi, ''), // Strip HTML from excerpt
       date: new Date(post.date),
-      tags: post.tags?.nodes.map(tag => tag.name) || [],
+      tags: post.tags?.nodes.map((tag) => tag.name) || [],
       featuredImage: post.featuredImage?.node.sourceUrl
     },
     body: post.content
