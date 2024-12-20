@@ -1,7 +1,7 @@
 import type { WordPressPost } from '../types/wordpress';
 
 export interface TransformedPost {
-  id?: string;
+  id: string;
   slug: string;
   collection: 'blog';
   data: {
@@ -13,7 +13,7 @@ export interface TransformedPost {
     featuredImage?: string;
   };
   body: string;
-  render?: () => Promise<{ Content: any }>;
+  render: () => Promise<{ Content: any }>;
 }
 
 export function transformWordPressPost(post: WordPressPost): TransformedPost {
@@ -29,6 +29,7 @@ export function transformWordPressPost(post: WordPressPost): TransformedPost {
       draft: false,
       featuredImage: post.featuredImage?.node.sourceUrl
     },
-    body: post.content
+    body: post.content,
+    render: async () => ({ Content: () => post.content })
   };
 }

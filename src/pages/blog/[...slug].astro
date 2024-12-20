@@ -3,6 +3,7 @@ import PageLayout from "@layouts/PageLayout.astro"
 import TopLayout from "@layouts/TopLayout.astro"
 import BottomLayout from "@layouts/BottomLayout.astro"
 import ArticleTopLayout from "@layouts/ArticleTopLayout.astro"
+import ArticleBottomLayout from "@layouts/ArticleBottomLayout.astro"
 import { getAllPosts } from "@lib/wordpress"
 import { transformWordPressPost } from "@lib/transformers"
 import type { TransformedPost } from "@lib/transformers"
@@ -33,7 +34,7 @@ const { title, summary } = post.data;
   </TopLayout>
   <BottomLayout>
     <div class="animate">
-      <div set:html={post.body} />
+      <ArticleBottomLayout entry={post} />
     </div>
   </BottomLayout>
 </PageLayout>
