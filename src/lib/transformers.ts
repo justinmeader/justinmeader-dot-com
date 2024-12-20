@@ -16,10 +16,15 @@ export function transformWordPressPost(post: WordPressPost): TransformedPost {
       tags: post.tags?.nodes.map((tag) => tag.name) || [],
       draft: false
     },
-    render: async () => ({
-      Content: () => post.content,
-      headings: [],
-      remarkPluginFrontmatter: {}
-    })
+    render: async () => {
+      const Content = () => post.content;
+      return {
+        Content,
+        headings: [],
+        remarkPluginFrontmatter: {},
+        // Ensure Content is a proper component
+        isAstroComponentFactory: true
+      };
+    }
   };
 }
