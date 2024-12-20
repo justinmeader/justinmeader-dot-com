@@ -18,14 +18,17 @@ export function transformWordPressPost(post: WordPressPost): TransformedPost {
       tags: post.tags?.nodes.map((tag) => tag.name) || [],
       draft: false,
     },
-    // If you're not using `Content` anymore, you can remove `render` entirely.
-    // But if you still need `render` for some reason, just provide types for parameters:
+    // If you're no longer using `render()` you can remove it entirely.
+    // If you need it for compatibility, here's a version that silences the type errors:
     async render(): Promise<RenderResult> {
-      const Content = ((result: unknown, props: Record<string, unknown>, slots: Record<string, unknown>) => {
-        // Just return a simple piece of HTML, or remove entirely if not used.
-        return Promise.resolve('<div>Hello World</div>');
-      }) as RenderResult["Content"];
-
+      // Provide explicit any types to avoid warnings about implicit 'any'
+      const Content = (( _result: any, _props: any, _slots: any ) => {
+        // Return an async generator yielding a simple HTML string
+        return (async function* () {
+          yield `<div>Hello World</div>`;
+        })();
+      }) as unknown as RenderResult["Content"];
+      
       return {
         Content,
         headings: [],
