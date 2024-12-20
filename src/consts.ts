@@ -2,7 +2,7 @@ import type { Site, Page, Links, Socials } from "@types"
 
 // Global
 export const SITE: Site = {
-  TITLE: "JUSTINMEADER.COM",
+  TITLE: "JUSTIN MEADER",
   DESCRIPTION: "He is too bald to trust.",
   AUTHOR: "Justin Meader",
 }

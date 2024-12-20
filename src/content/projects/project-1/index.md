@@ -4,11 +4,8 @@ summary: "Lorem ipsum dolor sit amet"
 date: "Mar 18 2022"
 draft: false
 tags:
-- Astro
-- Javascript
-- Typescript
-- Tailwind
-- SolidJs
+- Podcast
+- Business
 demoUrl: https://astro-sphere-demo.vercel.app
 repoUrl: https://github.com/markhorn-dev/astro-sphere
 ---
