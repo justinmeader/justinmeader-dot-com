@@ -1,17 +1,24 @@
 ---
-import { getCollection } from "astro:content"
 import PageLayout from "@layouts/PageLayout.astro"
 import TopLayout from "@layouts/TopLayout.astro"
 import BottomLayout from "@layouts/BottomLayout.astro"
 import Blog from "@components/Blog"
+import ErrorState from "@components/ErrorState"
 import { BLOG } from "@consts"
+import { getAllPosts } from "@lib/wordpress"
+import { transformWordPressPost } from "@lib/transformers"
 
-const posts = (await getCollection("blog"))
-  .filter(post => !post.data.draft)
-  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+let posts = [];
+let error = null;
 
-const tags = [...new Set(posts.flatMap(post => post.data.tags))]
-  .sort((a, b) => a.localeCompare(b))
+try {
+  const wpPosts = await getAllPosts();
+  posts = wpPosts.map(transformWordPressPost);
+} catch (e) {
+  error = e instanceof Error ? e.message : 'Failed to load posts';
+}
+
+const tags = error ? [] : [...new Set(posts.flatMap(post => post.data.tags))].sort();
 ---
 
 <PageLayout title={BLOG.TITLE} description={BLOG.DESCRIPTION}>
@@ -22,9 +29,11 @@ const tags = [...new Set(posts.flatMap(post => post.data.tags))]
   </TopLayout>
   <BottomLayout>
     <div class="animate">
-      <Blog client:load tags={tags} data={posts} />
+      {error ? (
+        <ErrorState message={error} />
+      ) : (
+        <Blog client:load tags={tags} data={posts} />
+      )}
     </div>
   </BottomLayout>
 </PageLayout>
-
-

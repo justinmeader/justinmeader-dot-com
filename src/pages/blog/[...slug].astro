@@ -1,24 +1,36 @@
 ---
-import { type CollectionEntry, getCollection } from "astro:content"
 import PageLayout from "@layouts/PageLayout.astro"
 import TopLayout from "@layouts/TopLayout.astro"
 import BottomLayout from "@layouts/BottomLayout.astro"
 import ArticleTopLayout from "@layouts/ArticleTopLayout.astro"
 import ArticleBottomLayout from "@layouts/ArticleBottomLayout.astro"
+import { getPostBySlug, getAllPosts } from "@lib/wordpress"
 
-// Create the static blog pages
 export async function getStaticPaths() {
-	const posts = await getCollection("blog")
-	return posts.map((post) => ({
-		params: { slug: post.slug },
-		props: post,
-	}))
+  const posts = await getAllPosts();
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: {
+      post: {
+        slug: post.slug,
+        collection: 'blog',
+        data: {
+          title: post.title,
+          summary: post.excerpt,
+          date: new Date(post.date),
+          tags: post.tags?.nodes.map(tag => tag.name) || [],
+        },
+        body: post.content,
+        render: async () => ({
+          Content: () => post.content
+        })
+      }
+    },
+  }));
 }
 
-// Get the requested post
-type Props = CollectionEntry<"blog">
-const post = Astro.props
-const { title, summary } = post.data
+const { post } = Astro.props;
+const { title, summary } = post.data;
 ---
 
 <PageLayout title={title} description={summary}>
@@ -29,7 +41,7 @@ const { title, summary } = post.data
   </TopLayout>
   <BottomLayout>
     <div class="animate">
-      <ArticleBottomLayout entry={post} />
+      <div set:html={post.body} />
     </div>
   </BottomLayout>
 </PageLayout>

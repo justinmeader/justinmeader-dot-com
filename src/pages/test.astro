@@ -1,0 +1,43 @@
+---
+import { GraphQLClient } from 'graphql-request';
+
+const endpoint = import.meta.env.WORDPRESS_API_URL;
+
+async function testConnection() {
+  try {
+    const client = new GraphQLClient(endpoint);
+    
+    // Simple query to test connection
+    const query = `
+      query TestQuery {
+        posts {
+          nodes {
+            id
+            title
+          }
+        }
+      }
+    `;
+    
+    const data = await client.request(query);
+    return { success: true, data };
+  } catch (error) {
+    return { 
+      success: false, 
+      error: error instanceof Error ? error.message : 'Unknown error'
+    };
+  }
+}
+
+const result = await testConnection();
+---
+
+<div style="padding: 20px;">
+  <h1>WordPress GraphQL Connection Test</h1>
+  
+  <h2>Configuration:</h2>
+  <pre>Endpoint: {endpoint}</pre>
+
+  <h2>Test Results:</h2>
+  <pre>{JSON.stringify(result, null, 2)}</pre>
+</div>
