@@ -1,4 +1,5 @@
 import { GraphQLClient } from 'graphql-request';
+import type { WordPressPost, WordPressResponse } from '@types/wordpress';
 
 const endpoint = import.meta.env.WORDPRESS_API_URL;
 
@@ -6,33 +7,13 @@ if (!endpoint) {
   throw new Error('WORDPRESS_API_URL environment variable is not set');
 }
 
-// Initialize the GraphQL client with error handling
 const client = new GraphQLClient(endpoint, {
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
-export interface Post {
-  id: string;
-  title: string;
-  slug: string;
-  content: string;
-  excerpt: string;
-  date: string;
-  featuredImage?: {
-    node: {
-      sourceUrl: string;
-    };
-  };
-  tags?: {
-    nodes: {
-      name: string;
-    }[];
-  };
-}
-
-export async function getAllPosts(): Promise<Post[]> {
+export async function getAllPosts(): Promise<WordPressPost[]> {
   const query = `
     query GetPosts {
       posts(first: 100, where: { status: PUBLISH }) {
@@ -60,7 +41,7 @@ export async function getAllPosts(): Promise<Post[]> {
 
   try {
     console.log('Fetching posts from:', endpoint);
-    const data = await client.request(query);
+    const data = await client.request<WordPressResponse>(query);
     console.log('Posts fetched successfully');
     return data.posts.nodes;
   } catch (error) {
@@ -69,7 +50,7 @@ export async function getAllPosts(): Promise<Post[]> {
   }
 }
 
-export async function getPostBySlug(slug: string): Promise<Post | null> {
+export async function getPostBySlug(slug: string): Promise<WordPressPost | null> {
   const query = `
     query GetPost($slug: String!) {
       post(id: $slug, idType: SLUG) {
@@ -95,7 +76,7 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
 
   try {
     console.log('Fetching post with slug:', slug);
-    const data = await client.request(query, { slug });
+    const data = await client.request<{ post: WordPressPost }>(query, { slug });
     console.log('Post fetched successfully');
     return data.post;
   } catch (error) {

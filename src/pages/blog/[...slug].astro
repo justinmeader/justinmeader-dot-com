@@ -3,30 +3,22 @@ import PageLayout from "@layouts/PageLayout.astro"
 import TopLayout from "@layouts/TopLayout.astro"
 import BottomLayout from "@layouts/BottomLayout.astro"
 import ArticleTopLayout from "@layouts/ArticleTopLayout.astro"
-import ArticleBottomLayout from "@layouts/ArticleBottomLayout.astro"
-import { getPostBySlug, getAllPosts } from "@lib/wordpress"
+import { getAllPosts } from "@lib/wordpress"
+import { transformWordPressPost } from "@lib/transformers"
+import type { TransformedPost } from "@lib/transformers"
 
 export async function getStaticPaths() {
   const posts = await getAllPosts();
   return posts.map((post) => ({
     params: { slug: post.slug },
     props: {
-      post: {
-        slug: post.slug,
-        collection: 'blog',
-        data: {
-          title: post.title,
-          summary: post.excerpt,
-          date: new Date(post.date),
-          tags: post.tags?.nodes.map(tag => tag.name) || [],
-        },
-        body: post.content,
-        render: async () => ({
-          Content: () => post.content
-        })
-      }
+      post: transformWordPressPost(post)
     },
   }));
+}
+
+interface Props {
+  post: TransformedPost;
 }
 
 const { post } = Astro.props;

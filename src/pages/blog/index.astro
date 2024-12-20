@@ -7,9 +7,10 @@ import ErrorState from "@components/ErrorState"
 import { BLOG } from "@consts"
 import { getAllPosts } from "@lib/wordpress"
 import { transformWordPressPost } from "@lib/transformers"
+import type { TransformedPost } from "@lib/transformers"
 
-let posts = [];
-let error = null;
+let posts: TransformedPost[] = [];
+let error: string | null = null;
 
 try {
   const wpPosts = await getAllPosts();
