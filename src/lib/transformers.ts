@@ -16,12 +16,14 @@ export function transformWordPressPost(post: WordPressPost): TransformedPost {
       tags: post.tags?.nodes.map((tag) => tag.name) || [],
       draft: false
     },
-    render: async () => ({
-      Content: function Content() {
-        return post.content;
-      },
-      headings: [],
-      remarkPluginFrontmatter: {}
-    })
+    render: async () => {
+      // Correctly return a RenderResult type
+      const Content = () => post.content;
+      return {
+        Content,
+        headings: [], // Provide valid headings if available
+        remarkPluginFrontmatter: {}, // Adjust this if specific frontmatter is required
+      };
+    },
   };
 }
