@@ -2,8 +2,7 @@
 import { getCollection } from "astro:content"
 import PageLayout from "@layouts/PageLayout.astro"
 import ArrowCard from "@components/ArrowCard"
-import StackCard from "@components/StackCard.astro"
-import { SITE, SOCIALS } from "@consts"
+import { SITE } from "@consts"
 import TwinklingStars from "@components/TwinklingStars.astro"
 import MeteorShower from "@components/MeteorShower.astro"
 
@@ -16,33 +15,9 @@ const projects = (await getCollection("projects"))
   .filter(project => !project.data.draft)
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
   .slice(0,3)
-
-const stack = [
-  { 
-    text: "Astro", 
-    icon: "astro", 
-    href: "https://astro.build" 
-  },
-  { 
-    text: "Javascript", 
-    icon: "javascript", 
-    href: "https://www.javascript.com" 
-  },
-  { 
-    text: "Typescript", 
-    icon: "typescript", 
-    href: "https://www.typescriptlang.org" 
-  },
-  { 
-    text: "Tailwind", 
-    icon: "tailwind", 
-    href: "https://tailwindcss.com" 
-  },
-]
 ---
 
 <PageLayout title="Home" description={SITE.DESCRIPTION}>
-
   <!-- Light Mode: Particles -->
   <div class='absolute inset-0 bg-block dark:hidden'>
     <div id='particles1' class='fixed inset-0'></div>
@@ -57,7 +32,7 @@ const stack = [
     <div id='stars3' class='fixed inset-0'></div>
   </div>
 
-  <!-- Dark Theme: Twinkling Stars / Metors -->
+  <!-- Dark Theme: Twinkling Stars / Meteors -->
   <div id="galaxy" class="fixed inset-0">
     <div class="hidden dark:block">
       <TwinklingStars/>
@@ -103,7 +78,6 @@ const stack = [
 
   <div class="relative bg-white dark:bg-black">
     <div class="mx-auto max-w-screen-sm p-5 space-y-24 pb-16">
-
       <!-- About Section -->
       <section class="animate">
         <article>
@@ -136,32 +110,6 @@ const stack = [
         </div>
       </section>
 
-      <!-- Tech Stack Section 
-      <section class="animate">
-        <div class="space-y-4">
-          <p class="font-semibold text-black dark:text-white">
-            Website build with
-          </p>
-          <div class="flex flex-wrap items-center gap-2 mt-5">
-            {stack.map(item => (
-              <StackCard 
-                text={item.text}
-                icon={item.icon}
-                href={item.href}
-              />
-            ))}
-          </div>
-          <div>
-            Performing reactivity and statefulness, special guest
-            <a href="https://www.solidjs.com/" target="_blank" class="w-fit group underline decoration-[.5px] decoration-black/25 dark:decoration-white/50 hover:decoration-black dark:hover:decoration-white text-black dark:text-white underline-offset-2 blend">
-              <span class="text-black/75 dark:text-white/75 group-hover:text-black group-hover:dark:text-white blend">
-                SolidJS
-              </span>
-            </a>
-          </div>
-        </div>
-      </section> -->
-
       <!-- Project Preview Section -->
       <section class="animate">
         <div class="space-y-4">
@@ -184,34 +132,6 @@ const stack = [
           </ul>
         </div>
       </section>
-
-      <!-- Contact Section 
-      <section class="animate">
-        <div>
-          <p class="font-semibold text-black dark:text-white">
-            Let's Connect
-          </p>
-          <p>
-            Reach out to me via email or on social media.
-          </p>
-          <div class="grid grid-cols-4 gap-y-2 mt-4 auto-cols-min">
-            {SOCIALS.map(social => (
-              <div class="col-span-1 flex items-center gap-1">
-                <span class="whitespace-nowrap truncate">
-                  {social.NAME}
-                </span>
-              </div>
-              <div class="col-span-3 truncate">
-                <a href={social.HREF} target="_blank" class="w-fit col-span-3 group flex gap-1 items-center underline decoration-[.5px] decoration-black/25 dark:decoration-white/50 hover:decoration-black dark:hover:decoration-white text-black dark:text-white underline-offset-2 blend">
-                  <span class="text-black/75 dark:text-white/75 group-hover:text-black group-hover:dark:text-white blend">
-                    {social.TEXT}
-                  </span>
-                </a>
-              </div>
-            ))}
-        </div>
-      </section> -->
-      
     </div>
   </div>
 </PageLayout>

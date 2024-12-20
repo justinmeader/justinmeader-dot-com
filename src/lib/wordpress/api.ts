@@ -1,4 +1,4 @@
-import type { WordPressPost, WordPressResponse, WordPressPostResponse } from '@types/wordpress';
+import type { WordPressPost, WordPressResponse, WordPressPostResponse } from '../../types/wordpress';
 import { client } from './client';
 import { GET_ALL_POSTS, GET_POST_BY_SLUG } from './queries';
 
