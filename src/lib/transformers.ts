@@ -1,5 +1,5 @@
 import type { CollectionEntry } from "astro:content";
-import type { WordPressPost } from '../types/wordpress';
+import type { WordPressPost } from '@types/wordpress';
 
 export type TransformedPost = CollectionEntry<"blog">;
 
@@ -8,7 +8,7 @@ export function transformWordPressPost(post: WordPressPost): TransformedPost {
     id: post.id,
     slug: post.slug,
     body: post.content,
-    collection: 'blog',
+    collection: 'blog' as const,
     data: {
       title: post.title,
       summary: post.excerpt.replace(/(<([^>]+)>)/gi, ''),
@@ -19,7 +19,12 @@ export function transformWordPressPost(post: WordPressPost): TransformedPost {
     render: async () => ({
       Content: () => post.content,
       headings: [],
-      remarkPluginFrontmatter: {}
+      remarkPluginFrontmatter: {},
+      propagation: undefined,
+      propagationId: undefined,
+      postprocess: false,
+      scripts: [],
+      styles: []
     })
   };
 }

@@ -1,6 +1,7 @@
+// Define all GraphQL queries in one place
 export const GET_ALL_POSTS = `
-  query GetPosts {
-    posts(first: 100, where: { status: PUBLISH }) {
+  query GetPosts($first: Int!, $status: PostStatusEnum!) {
+    posts(first: $first, where: { status: $status }) {
       nodes {
         id
         title
@@ -17,29 +18,6 @@ export const GET_ALL_POSTS = `
           nodes {
             name
           }
-        }
-      }
-    }
-  }
-`;
-
-export const GET_POST_BY_SLUG = `
-  query GetPost($slug: String!) {
-    post(id: $slug, idType: SLUG) {
-      id
-      title
-      slug
-      content
-      excerpt
-      date
-      featuredImage {
-        node {
-          sourceUrl
-        }
-      }
-      tags {
-        nodes {
-          name
         }
       }
     }
