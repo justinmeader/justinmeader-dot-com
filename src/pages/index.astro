@@ -5,11 +5,15 @@ import ArrowCard from "@components/ArrowCard"
 import { SITE } from "@consts"
 import TwinklingStars from "@components/TwinklingStars.astro"
 import MeteorShower from "@components/MeteorShower.astro"
+import { getAllPosts } from "@lib/wordpress"
+import { transformWordPressPost } from "@lib/transformers"
 
-const posts = (await getCollection("blog"))
-  .filter(post => !post.data.draft)
+// Get WordPress posts
+const wpPosts = await getAllPosts()
+const posts = wpPosts
+  .map(transformWordPressPost)
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
-  .slice(0,3)
+  .slice(0, 3)
 
 const projects = (await getCollection("projects"))
   .filter(project => !project.data.draft)
