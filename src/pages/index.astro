@@ -1,4 +1,5 @@
 ---
+// src/pages/index.astro
 import { getCollection } from "astro:content"
 import PageLayout from "@layouts/PageLayout.astro"
 import ArrowCard from "@components/ArrowCard"
@@ -57,17 +58,17 @@ const projects = (await getCollection("projects"))
       <section class="animate">
         <div class="space-y-4">
           <div class="flex justify-between">
-            <p class="font-semibold text-black dark:text:white">
+            <p class="font-semibold text-black dark:text-white">
               Recent posts
             </p>
-            <a href="/blog" class="w-fit col-span-3 group flex gap-1 items-center underline decoration-[.5px] decoration-black/25 dark:decoration:white/50 hover:decoration:black dark:hover:decoration:white text:black dark:text:white underline-offset-2 blend">
-              <span class="text:black/75 dark:text:white/75 group-hover:text:black group-hover:dark:text:white blend">
+            <a href="/blog" class="w-fit col-span-3 group flex gap-1 items-center underline decoration-[.5px] decoration-black/25 dark:decoration-white/50 hover:decoration-black dark:hover:decoration-white text-black dark:text-white underline-offset-2 blend">
+              <span class="text-black/75 dark:text-white/75 group-hover:text-black group-hover:dark:text-white blend">
                 All posts
               </span>
             </a>
           </div>
           <ul class="space-y-4">
-            {posts.map((post) => (
+            {posts.map((post: any) => (
               <li>
                 <ArrowCard entry={post} />
               </li>
@@ -80,17 +81,17 @@ const projects = (await getCollection("projects"))
       <section class="animate">
         <div class="space-y-4">
           <div class="flex justify-between">
-            <p class="font-semibold text:black dark:text:white">
+            <p class="font-semibold text-black dark:text-white">
               My Projects
             </p>
-            <a href="/projects" class="w-fit col-span-3 group flex gap-1 items-center underline decoration-[.5px] decoration:black/25 dark:decoration:white/50 hover:decoration:black dark:hover:decoration:white text:black dark:text:white underline-offset-2 blend">
-              <span class="text:black/75 dark:text:white/75 group-hover:text:black group-hover:dark:text:white blend">
+            <a href="/projects" class="w-fit col-span-3 group flex gap-1 items-center underline decoration-[.5px] decoration-black/25 dark:decoration-white/50 hover:decoration-black dark:hover:decoration-white text-black dark:text-white underline-offset-2 blend">
+              <span class="text-black/75 dark:text-white/75 group-hover:text-black group-hover:dark:text-white blend">
                 All projects
               </span>
             </a>
           </div>
           <ul class="space-y-4">
-            {projects.map((project) => (
+            {projects.map((project: any) => (
               <li>
                 <ArrowCard entry={project} />
               </li>
