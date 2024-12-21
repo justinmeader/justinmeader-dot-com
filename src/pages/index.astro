@@ -6,11 +6,37 @@ import { SITE } from "@consts"
 import TwinklingStars from "@components/TwinklingStars.astro"
 import MeteorShower from "@components/MeteorShower.astro"
 
-const posts = (await getCollection("blog"))
-  .filter(post => !post.data.draft)
-  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
-  .slice(0,3)
+// Fetch Recent Posts from WordPress via GraphQL
+const wpResponse = await fetch('https://cms.meader.cloud/graphql', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    query: `
+      query {
+        posts(first: 3, where: {orderby: {field: DATE, order: DESC}}) {
+          nodes {
+            id
+            title
+            slug
+            excerpt
+            date
+            featuredImage {
+              node {
+                sourceUrl
+              }
+            }
+          }
+        }
+      }
+    `
+  })
+});
 
+const wpData = await wpResponse.json();
+
+const posts = wpData.data.posts.nodes;
+
+// Fetch projects locally
 const projects = (await getCollection("projects"))
   .filter(project => !project.data.draft)
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
@@ -41,7 +67,7 @@ const projects = (await getCollection("projects"))
             </a>
           </div>
           <ul class="space-y-4">
-            {posts.map((post: any) => (
+            {posts.map((post) => (
               <li>
                 <ArrowCard entry={post} />
               </li>
@@ -64,7 +90,7 @@ const projects = (await getCollection("projects"))
             </a>
           </div>
           <ul class="space-y-4">
-            {projects.map((project: any) => (
+            {projects.map((project) => (
               <li>
                 <ArrowCard entry={project} />
               </li>
