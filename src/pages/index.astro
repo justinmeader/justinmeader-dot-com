@@ -1,22 +1,47 @@
 ---
-import { getCollection } from "astro:content"
 import PageLayout from "@layouts/PageLayout.astro"
 import ArrowCard from "@components/ArrowCard"
 import { SITE } from "@consts"
 import TwinklingStars from "@components/TwinklingStars.astro"
 import MeteorShower from "@components/MeteorShower.astro"
+import { getCollection } from "astro:content"
 
-const posts = (await getCollection("blog"))
-  .filter(post => !post.data.draft)
-  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
-  .slice(0,3)
+// Fetch Recent Posts from WordPress via GraphQL
+const wpResponse = await fetch('https://cms.meader.cloud/graphql', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    query: `
+      query {
+        posts(first: 3, where: {orderby: {field: DATE, order: DESC}}) {
+          nodes {
+            id
+            title
+            slug
+            excerpt
+            date
+            featuredImage {
+              node {
+                sourceUrl
+              }
+            }
+          }
+        }
+      }
+    `
+  })
+});
 
+const wpData = await wpResponse.json();
+
+const posts = wpData.data.posts.nodes;
+
+// Fetch projects locally
 const projects = (await getCollection("projects"))
   .filter(project => !project.data.draft)
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
   .slice(0,3)
 ---
-
 <PageLayout title="Home" description={SITE.DESCRIPTION}>
   <!-- Light Mode: Particles -->
   <div class='absolute inset-0 bg-block dark:hidden'>
@@ -81,7 +106,7 @@ const projects = (await getCollection("projects"))
       <!-- About Section -->
       <section class="animate">
         <article>
-          <p>I am an <b>experienced IT professional</b> and a <b>video games industry veteran</b> currently working as a <b>Service Delivery Engineer</b> and <b>Jira Administrator</b>. I own an operate a small <b>IT managed services provider</b>, <a href="https://www.magiteksolutions.com">Magitek Solutions</a>. I am an <b>avid concert-goer</b>, a <b>podcaster</i></b>, <b>musician</b>, <b>amateur astronomer and astrophotographer</b>, <b>armchair cosmologist</b>, <b>beard enthusiast</b> and am <b><a href="https://x.com/KeatonPatti/status/1070708630691942400/photo/1">too bald to trust</a></b>.</p>
+          <p>I am an <b>experienced IT professional</b> and a <b>video games industry veteran</b> currently working as a <b>Service Delivery Engineer</b> and <b>Jira Administrator</b>. I own an operate a small <b>IT managed services provider</b>, <a href="https://www.magiteksolutions.com">Magitek Solutions</a>. I am an <b>avid concert-goer</b>, a <b>podcaster</b>, <b>musician</b>, <b>amateur astronomer and astrophotographer</b>, <b>armchair cosmologist</b>, <b>beard enthusiast</b> and am <b><a href="https://x.com/KeatonPatti/status/1070708630691942400/photo/1">too bald to trust</a></b>.</p>
           <p>This is a place for my thoughts, my projects, and to share things that I think might interest or be useful to other people. Thanks for stopping by!</p>
           <img src="https://images.fineartamerica.com/images/artworkimages/medium/3/cowboy-bebop-spike-see-you-space-cowboy-lewis-james-transparent.png" alt="Cowboy Bebop - See You Space Cowboy" style="display: block; margin: 0 auto; width: 300px;">
         </article>
@@ -95,13 +120,13 @@ const projects = (await getCollection("projects"))
               Recent posts
             </p>
             <a href="/blog" class="w-fit col-span-3 group flex gap-1 items-center underline decoration-[.5px] decoration-black/25 dark:decoration-white/50 hover:decoration-black dark:hover:decoration-white text-black dark:text-white underline-offset-2 blend">
-              <span class="text-black/75 dark:text-white/75 group-hover:text-black group-hover:dark:text-white blend">
+              <span class="text-black/75 dark:text-white/75 group-hover:text-black group-hover:dark:text:white blend">
                 All posts
               </span>
             </a>
           </div>
           <ul class="space-y-4">
-            {posts.map((post) => (
+            {posts.map((post: any) => (
               <li>
                 <ArrowCard entry={post} />
               </li>
@@ -119,12 +144,12 @@ const projects = (await getCollection("projects"))
             </p>
             <a href="/projects" class="w-fit col-span-3 group flex gap-1 items-center underline decoration-[.5px] decoration-black/25 dark:decoration-white/50 hover:decoration-black dark:hover:decoration-white text-black dark:text-white underline-offset-2 blend">
               <span class="text-black/75 dark:text-white/75 group-hover:text-black group-hover:dark:text-white blend">
-                <!-- All projects -->
+                All projects
               </span>
             </a>
           </div>
           <ul class="space-y-4">
-            {projects.map((project) => (
+            {projects.map((project: any) => (
               <li>
                 <ArrowCard entry={project} />
               </li>
