@@ -1,47 +1,22 @@
 ---
+import { getCollection } from "astro:content"
 import PageLayout from "@layouts/PageLayout.astro"
 import ArrowCard from "@components/ArrowCard"
 import { SITE } from "@consts"
 import TwinklingStars from "@components/TwinklingStars.astro"
 import MeteorShower from "@components/MeteorShower.astro"
-import { getCollection } from "astro:content"
 
-// Fetch Recent Posts from WordPress via GraphQL
-const wpResponse = await fetch('https://cms.meader.cloud/graphql', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({
-    query: `
-      query {
-        posts(first: 3, where: {orderby: {field: DATE, order: DESC}}) {
-          nodes {
-            id
-            title
-            slug
-            excerpt
-            date
-            featuredImage {
-              node {
-                sourceUrl
-              }
-            }
-          }
-        }
-      }
-    `
-  })
-});
+const posts = (await getCollection("blog"))
+  .filter(post => !post.data.draft)
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .slice(0,3)
 
-const wpData = await wpResponse.json();
-
-const posts = wpData.data.posts.nodes;
-
-// Fetch projects locally
 const projects = (await getCollection("projects"))
   .filter(project => !project.data.draft)
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
   .slice(0,3)
 ---
+
 <PageLayout title="Home" description={SITE.DESCRIPTION}>
   <!-- Light Mode: Particles -->
   <div class='absolute inset-0 bg-block dark:hidden'>
@@ -126,7 +101,7 @@ const projects = (await getCollection("projects"))
             </a>
           </div>
           <ul class="space-y-4">
-            {posts.map((post: any) => (
+            {posts.map((post) => (
               <li>
                 <ArrowCard entry={post} />
               </li>
@@ -144,12 +119,12 @@ const projects = (await getCollection("projects"))
             </p>
             <a href="/projects" class="w-fit col-span-3 group flex gap-1 items-center underline decoration-[.5px] decoration-black/25 dark:decoration-white/50 hover:decoration-black dark:hover:decoration-white text-black dark:text-white underline-offset-2 blend">
               <span class="text-black/75 dark:text-white/75 group-hover:text-black group-hover:dark:text-white blend">
-                All projects
+                <!-- All projects -->
               </span>
             </a>
           </div>
           <ul class="space-y-4">
-            {projects.map((project: any) => (
+            {projects.map((project) => (
               <li>
                 <ArrowCard entry={project} />
               </li>
