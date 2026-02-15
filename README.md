@@ -83,12 +83,6 @@ The active theme is located in `ghost/themes/format/`. Changes should be tested 
 
 Theme changes are deployed manually via Ghost Admin UI or SSH/SFTP to the droplet.
 
-### Safe Deployment Runbook
-
-For the operational deployment workflow (preflight, CI gates, rollback, incident response), use:
-
-- `docs/SAFE_DEPLOY_RUNBOOK.md`
-
 ## Notes
 
 - **Never commit** database dumps, secrets, or `.env` files
