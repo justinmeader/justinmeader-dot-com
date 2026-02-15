@@ -1,211 +1,462 @@
-# Safe Deploy Runbook (Ghost-First)
+# Safe Deployment Runbook
 
-This runbook is for **safe iteration + recoverability** on `justinmeader.com`.
+**Purpose:** Operational guide for safe iteration and recoverability of justinmeader.com Ghost site.
 
-Scope:
-- Content/config edits in Ghost Admin
-- Theme code edits versioned in this repo
-- CI-gated validation before production-facing theme changes
+**Last Updated:** 2026-02-15
 
 ---
 
-## 0) Known-good references
+## Quick Reference
 
-- Repo: `https://github.com/justinmeader/justinmeader-dot-com`
-- Theme path in repo: `ghost/themes/format/`
-- CI workflow: `.github/workflows/playwright.yml`
-- Required branch check on `main`: `test` (Playwright)
+| Change Type | Path | Risk Level |
+|-------------|------|------------|
+| Content (posts, pages, settings) | Ghost Admin UI | **LOW** — auto-versioned by Ghost |
+| Theme code (templates, styles, scripts) | `ghost/themes/format/` → Deploy | **MEDIUM** — requires deployment |
+| Ghost config (routes, redirects) | `ghost/config/` → Restart | **HIGH** — service restart required |
 
 ---
 
-## 1) Preflight checklist (always)
+## Preflight Checks
 
-Run from repo root:
-
-```bash
-cd /root/.openclaw/workspace-workshop/sites/justinmeader-dot-com
-
-git status
-git pull --ff-only
-npm ci
-npm test
-```
-
-Go / no-go:
-- ✅ Working tree clean (or intentional changes only)
-- ✅ Local tests pass
-- ✅ You can reach production site (`https://justinmeader.com`)
-
-Quick production smoke:
+### Before ANY deployment:
 
 ```bash
+# 1. Verify current production state
 curl -I https://justinmeader.com
-curl -s -o /dev/null -w "%{http_code}\n" https://justinmeader.com/about/
+curl -s https://justinmeader.com | grep -o '<title>[^<]*</title>'
+
+# 2. Check Ghost service status (SSH to droplet)
+ssh root@justinmeader.com-ghost
+sudo systemctl status ghost_justinmeader-com
+sudo ghost status
+
+# 3. Verify database backup exists
+sudo ls -lth /var/backups/ghost/ | head -5
+
+# 4. Check disk space
+df -h /
+
+# 5. Verify CI passing
+# → Check GitHub Actions on latest main commit
+```
+
+### Pre-deployment snapshot:
+
+```bash
+# Create timestamped backup
+sudo ghost backup --file "pre-deploy-$(date +%Y%m%d-%H%M%S).json"
+
+# Backup current theme
+cd /var/www/ghost/content/themes
+sudo tar -czf "format-backup-$(date +%Y%m%d-%H%M%S).tar.gz" format/
 ```
 
 ---
 
-## 2) Choose change path
+## Change Paths
 
-## A) Ghost Admin content/config change (no theme code)
+### Path 1: Content Changes (Ghost Admin UI)
 
-Use for:
-- Posts/pages text updates
-- Navigation/menu tweaks
-- Theme setting values in Ghost Admin
+**Scope:** Posts, pages, design settings, navigation, integrations
 
-Workflow:
-1. Make edit in Ghost Admin.
-2. Verify on live site immediately.
-3. If change should be documented in git, snapshot related theme/config changes into repo (if applicable).
+**Risk:** LOW — Ghost auto-versions content
 
-Notes:
-- No forced code deploy required.
-- Still run quick verification checklist (Section 6).
+**Steps:**
 
-## B) Theme code change (repo-driven)
+1. Navigate to Ghost Admin: `https://justinmeader.com/ghost`
+2. Make changes in editor/settings
+3. Use "Preview" before publishing
+4. Click "Publish" or "Update"
 
-Use for:
-- Handlebars/CSS/JS theme edits
-- Layout/visual/system behavior updates
-- Files under `ghost/themes/format/**`
+**Verification:**
 
-Workflow summary:
-1. Edit code in repo.
-2. Run local tests.
-3. Push to branch / `main` (required status check enforces CI).
-4. Trigger/confirm Playwright workflow success.
-5. Promote theme to production host.
-6. Verify production.
+```bash
+# Check post published successfully
+curl -s https://justinmeader.com/[slug]/ | grep -o '<title>[^<]*</title>'
+
+# Verify RSS feed updated
+curl -s https://justinmeader.com/rss/ | grep -o '<title>[^<]*</title>' | head -5
+```
+
+**Rollback:**
+
+- Ghost Admin → Posts → Click post → "Post History" → Restore previous version
+- OR: Ghost Admin → Settings → Labs → Import Content (from backup JSON)
 
 ---
 
-## 3) CI gates (required)
+### Path 2: Theme Code Changes
 
-Run local first:
+**Scope:** Templates (`.hbs`), styles (`.css`), scripts (`.js`), assets
+
+**Risk:** MEDIUM — requires deployment and Ghost restart
+
+**Steps:**
+
+#### 2A. Local Development
 
 ```bash
+# 1. Create feature branch
+git checkout -b feature/theme-update
+
+# 2. Make changes in ghost/themes/format/
+
+# 3. Test locally (if running local Ghost)
+cd ghost/themes/format
+npm install
+npm run dev  # Watch mode for development
+
+# 4. Run theme validation
+npm test     # Runs gscan
+
+# 5. Commit changes
+git add ghost/themes/format/
+git commit -m "feat(theme): describe changes"
+git push origin feature/theme-update
+```
+
+#### 2B. CI Validation
+
+```bash
+# 6. Open PR to main
+gh pr create --title "Theme: [description]" --body "Changes: ..."
+
+# 7. Wait for CI checks
+# → Playwright smoke tests
+# → Visual regression tests
+# → Review test artifacts
+
+# 8. Merge PR when green
+gh pr merge --squash
+```
+
+#### 2C. Production Deployment
+
+**Option A: Ghost Admin Upload (Recommended)**
+
+```bash
+# 9. Build production theme package
+cd ghost/themes/format
+npm run build:prod  # Creates format.zip
+
+# 10. Upload via Ghost Admin
+# → Navigate to https://justinmeader.com/ghost/#/settings/design
+# → Click "Change theme" → Upload format.zip
+# → Click "Activate"
+```
+
+**Option B: SSH/SFTP (Advanced)**
+
+```bash
+# 9. SCP theme to droplet
+scp -r ghost/themes/format root@justinmeader.com-ghost:/var/www/ghost/content/themes/
+
+# 10. SSH and restart Ghost
+ssh root@justinmeader.com-ghost
+cd /var/www/ghost
+sudo chown -R ghost:ghost content/themes/format
+sudo ghost restart
+```
+
+#### 2D. Post-Deployment Verification
+
+```bash
+# 11. Run smoke tests against production
+BASE_URL=https://justinmeader.com npm test
+
+# 12. Visual checks
+# → Homepage loads
+# → Navigation functional
+# → Post pages render correctly
+# → Mobile responsive
+# → Dark mode toggle works
+
+# 13. Browser console checks
+# → No JavaScript errors
+# → No 404s for assets
+```
+
+**Rollback:**
+
+```bash
+# Revert to previous theme version
+ssh root@justinmeader.com-ghost
+cd /var/www/ghost/content/themes
+sudo tar -xzf format-backup-[timestamp].tar.gz
+sudo chown -R ghost:ghost format
+sudo ghost restart
+```
+
+---
+
+### Path 3: Ghost Config Changes
+
+**Scope:** `routes.yaml`, redirects, config.production.json
+
+**Risk:** HIGH — can break routing/access
+
+**Steps:**
+
+```bash
+# 1. Backup current config
+ssh root@justinmeader.com-ghost
+sudo cp /var/www/ghost/content/settings/routes.yaml /var/backups/ghost/routes-$(date +%Y%m%d).yaml
+
+# 2. Upload new routes.yaml via Ghost Admin
+# → Settings → Labs → Routes → Upload routes.yaml
+
+# 3. Restart Ghost
+sudo ghost restart
+
+# 4. Verify routes
+curl -I https://justinmeader.com/[custom-route]/
+```
+
+**Rollback:**
+
+```bash
+# Re-upload previous routes.yaml via Ghost Admin
+# OR via SSH:
+ssh root@justinmeader.com-ghost
+sudo cp /var/backups/ghost/routes-[timestamp].yaml /var/www/ghost/content/settings/routes.yaml
+sudo ghost restart
+```
+
+---
+
+## Test & CI Gates
+
+### Automated (GitHub Actions)
+
+Triggered on: PRs to `main`, manual dispatch
+
+**Tests:**
+- Playwright smoke tests (homepage, navigation, post rendering)
+- Visual regression (desktop 1440x1000, mobile iPhone 13)
+- Test artifacts retained 30 days
+
+**Manual trigger:**
+
+```bash
+gh workflow run playwright.yml --ref main
+```
+
+### Manual Pre-Deploy Tests
+
+```bash
+# Run full test suite locally
+npm test
+
+# Run with headed browser for debugging
+npm run test:headed
+
+# Update visual baselines (when intentional UI changes)
+npm run test:update-snapshots
+```
+
+---
+
+## Backup Checkpoints
+
+### Automated Backups (Droplet)
+
+**Location:** `/var/backups/ghost/`
+
+**Schedule:**
+- Daily: 2:00 AM ET (cron)
+- Pre-deploy: Manual (`ghost backup`)
+
+**Retention:** 30 days
+
+**Verify backups exist:**
+
+```bash
+ssh root@justinmeader.com-ghost
+ls -lth /var/backups/ghost/ | head -10
+```
+
+### Manual Backup
+
+```bash
+# Full Ghost backup (content + settings)
+ssh root@justinmeader.com-ghost
+sudo ghost backup --file "manual-$(date +%Y%m%d-%H%M%S).json"
+
+# Download backup locally
+scp root@justinmeader.com-ghost:/var/www/ghost/content/data/manual-*.json ~/backups/
+```
+
+### Restoration
+
+```bash
+# Restore from backup
+ssh root@justinmeader.com-ghost
+sudo ghost import /path/to/backup.json
+
+# OR via Ghost Admin:
+# → Settings → Labs → Import content → Upload JSON
+```
+
+---
+
+## Deployment Verification Checklist
+
+After ANY deployment, verify:
+
+- [ ] Homepage loads (200 status)
+- [ ] Post pages render correctly
+- [ ] Navigation links functional
+- [ ] RSS feed valid
+- [ ] Search works
+- [ ] Mobile responsive
+- [ ] Dark mode toggle
+- [ ] No JavaScript console errors
+- [ ] No 404s in Network tab
+- [ ] Ghost Admin accessible
+
+**Quick verification script:**
+
+```bash
+#!/bin/bash
+BASE="https://justinmeader.com"
+
+echo "Checking homepage..."
+curl -f -s -o /dev/null -w "%{http_code}\n" $BASE
+
+echo "Checking RSS..."
+curl -f -s -o /dev/null -w "%{http_code}\n" $BASE/rss/
+
+echo "Checking sitemap..."
+curl -f -s -o /dev/null -w "%{http_code}\n" $BASE/sitemap.xml
+
+echo "Running Playwright smoke tests..."
 npm test
 ```
 
-Trigger/inspect GitHub Actions manually when needed:
+---
+
+## Incident Quick-Response
+
+### Site Down / 502 Bad Gateway
 
 ```bash
-gh workflow run playwright.yml --ref main
-gh run list --workflow=playwright.yml --limit 5
-gh run view <run-id>
+# 1. Check Ghost service
+ssh root@justinmeader.com-ghost
+sudo systemctl status ghost_justinmeader-com
+
+# 2. Check Ghost logs
+sudo ghost log
+
+# 3. Restart Ghost
+sudo ghost restart
+
+# 4. If restart fails, check Node.js
+sudo systemctl status node
+
+# 5. Check Nginx
+sudo systemctl status nginx
+sudo nginx -t
+sudo systemctl restart nginx
 ```
 
-Hard rule:
-- Do not promote theme changes to production if Playwright `test` is failing.
+### Theme Breaks Rendering
+
+```bash
+# 1. Revert to previous theme backup
+ssh root@justinmeader.com-ghost
+cd /var/www/ghost/content/themes
+sudo tar -xzf format-backup-[latest].tar.gz
+sudo chown -R ghost:ghost format
+sudo ghost restart
+```
+
+### Content Accidentally Deleted
+
+```bash
+# 1. Restore from latest backup
+ssh root@justinmeader.com-ghost
+cd /var/backups/ghost
+ls -lt | head -5  # Find latest backup
+
+# 2. Import via Ghost Admin
+# → Settings → Labs → Import content → Upload JSON
+
+# 3. OR restore via CLI
+sudo ghost import backup-[timestamp].json
+```
+
+### Database Corruption
+
+```bash
+# 1. Stop Ghost
+ssh root@justinmeader.com-ghost
+sudo ghost stop
+
+# 2. Restore database from backup
+sudo mysql -u ghost -p
+DROP DATABASE ghost_production;
+CREATE DATABASE ghost_production;
+exit
+
+mysql -u ghost -p ghost_production < /var/backups/mysql/ghost_production-[timestamp].sql
+
+# 3. Start Ghost
+sudo ghost start
+```
+
+### SSL Certificate Issues
+
+```bash
+# 1. Check certificate expiry
+ssh root@justinmeader.com-ghost
+sudo certbot certificates
+
+# 2. Renew certificate
+sudo certbot renew --force-renewal
+
+# 3. Restart Nginx
+sudo systemctl restart nginx
+```
+
+### Emergency Rollback (Full)
+
+```bash
+# 1. Stop Ghost
+sudo ghost stop
+
+# 2. Restore theme from backup
+cd /var/www/ghost/content/themes
+sudo tar -xzf format-backup-[pre-deploy-timestamp].tar.gz
+
+# 3. Restore content from backup
+sudo ghost import /var/backups/ghost/pre-deploy-[timestamp].json
+
+# 4. Start Ghost
+sudo ghost start
+
+# 5. Verify
+curl -I https://justinmeader.com
+```
 
 ---
 
-## 4) Deployment steps (theme code path)
+## Emergency Contacts
 
-## 4.1 Package/sync theme
-
-Use your standard Ghost theme deployment method (Admin upload or server-side sync).
-
-If using Ghost Admin upload, upload a fresh `format.zip` built from current repo snapshot.
-
-## 4.2 Activate theme safely
-
-In Ghost Admin:
-1. Upload new theme package.
-2. Preview if available.
-3. Activate.
-
-## 4.3 Immediate post-activate checks
-
-```bash
-curl -s -o /dev/null -w "%{http_code}\n" https://justinmeader.com/
-curl -s -o /dev/null -w "%{http_code}\n" https://justinmeader.com/about/
-```
-
-Then run Playwright against prod URL (optional but recommended):
-
-```bash
-BASE_URL=https://justinmeader.com npm test
-```
+- **Droplet Console:** DigitalOcean dashboard → justinmeader.com-ghost → Access → Console
+- **DNS:** Cloudflare (if applicable) or DigitalOcean DNS
+- **Ghost Docs:** https://ghost.org/docs/
 
 ---
 
-## 5) Backup and rollback checkpoints
+## Notes
 
-Create checkpoint **before** risky changes.
-
-Suggested checkpoint moments:
-- Before Ghost upgrade/theme major edits
-- Before activating new theme package
-- Before editing DB-backed theme settings directly
-
-Rollback options (fastest first):
-1. Re-activate previously known-good theme package/version.
-2. Revert to known-good git commit and redeploy that theme build.
-3. Restore from host backup checkpoint (last resort).
-
-Git rollback pattern:
-
-```bash
-git log --oneline -n 20
-git checkout <known-good-commit>
-# rebuild/repackage/redeploy known-good snapshot
-```
+- **Never deploy during peak traffic** (evenings/weekends)
+- **Always test in staging first** (if staging environment exists)
+- **Keep this runbook updated** as workflows change
+- **Document all incidents** for future reference
 
 ---
 
-## 6) Verification checklist (post-change)
-
-Functional:
-- Homepage loads
-- Hero title/description render correctly
-- `/about/` returns 2xx/3xx
-- At least one primary nav path resolves correctly
-
-CI:
-- Latest Playwright run = success
-- Artifacts uploaded (`playwright-results`, `playwright-report`)
-
-Operational:
-- No obvious console/runtime breakage
-- No unexpected 404s on critical routes
-
----
-
-## 7) Incident quick response
-
-If production breaks:
-
-1. **Stop further changes**.
-2. Capture evidence quickly:
-
-```bash
-gh run list --workflow=playwright.yml --limit 3
-gh run view <run-id> --log-failed
-```
-
-3. Roll back to last known-good theme package/commit.
-4. Re-run verification checklist (Section 6).
-5. Open follow-up fix in git with root cause notes.
-
----
-
-## 8) Minimal command cheat sheet
-
-```bash
-# local validation
-npm ci && npm test
-
-# trigger CI
-gh workflow run playwright.yml --ref main
-
-# inspect recent runs
-gh run list --workflow=playwright.yml --limit 5
-
-# inspect one run
-gh run view <run-id>
-
-# failed logs only
-gh run view <run-id> --log-failed
-```
+**Version:** 1.0.0  
+**Maintained by:** Pod 014 (Workshop Agent)  
+**Repository:** https://github.com/justinmeader/justinmeader-dot-com

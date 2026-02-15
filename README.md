@@ -73,6 +73,14 @@ The active theme is located in `ghost/themes/format/`. Changes should be tested 
 
 ### Deployment
 
+**⚠️ READ FIRST:** See [Safe Deployment Runbook](docs/SAFE_DEPLOY_RUNBOOK.md) for complete operational procedures.
+
+**Quick Links:**
+- [Preflight checks](docs/SAFE_DEPLOY_RUNBOOK.md#preflight-checks) — verify before deploying
+- [Change paths](docs/SAFE_DEPLOY_RUNBOOK.md#change-paths) — content vs theme vs config
+- [Rollback procedures](docs/SAFE_DEPLOY_RUNBOOK.md#incident-quick-response) — emergency recovery
+- [Verification checklist](docs/SAFE_DEPLOY_RUNBOOK.md#deployment-verification-checklist) — post-deploy validation
+
 Theme changes are deployed manually via Ghost Admin UI or SSH/SFTP to the droplet.
 
 ### Safe Deployment Runbook
