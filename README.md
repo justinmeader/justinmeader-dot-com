@@ -89,6 +89,7 @@ Theme changes are deployed manually via Ghost Admin UI or SSH/SFTP to the drople
 - `docs/SITE_INVENTORY.md` — current route/theme/automation snapshot
 - `docs/DECISION_BACKLOG.md` — decisions needing Justin vs Pod defaults
 - `docs/METADATA_BASELINE_DRAFT.md` — metadata proposal (NOT APPLIED)
+- `docs/DECISION_RECOMMENDATIONS_V1.md` — Pod default recommendations + approve/edit checklist
 
 ## Notes
 
