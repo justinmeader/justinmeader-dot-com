@@ -5,3 +5,12 @@
 **/.DS_Store
 **/ghost-db.sql
 **/*.tgz
+
+# Node.js
+node_modules/
+package-lock.json
+
+# Playwright
+playwright-report/
+test-results/
+tests/**/*-snapshots/

@@ -1,0 +1,21 @@
+{
+  "name": "justinmeader-dot-com-tests",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:debug": "playwright test --debug",
+    "test:ui": "playwright test --ui",
+    "test:update-snapshots": "playwright test --update-snapshots",
+    "test:report": "playwright show-report",
+    "playwright:install": "playwright install --with-deps chromium"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.49.0"
+  },
+  "dependencies": {
+    "playwright": "^1.49.0"
+  }
+}
