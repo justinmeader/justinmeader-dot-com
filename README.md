@@ -84,6 +84,12 @@ The active theme is located in `ghost/themes/format/`. Changes should be tested 
 
 Theme changes are deployed manually via Ghost Admin UI or SSH/SFTP to the droplet.
 
+## Discovery Docs
+
+- `docs/SITE_INVENTORY.md` — current route/theme/automation snapshot
+- `docs/DECISION_BACKLOG.md` — decisions needing Justin vs Pod defaults
+- `docs/METADATA_BASELINE_DRAFT.md` — metadata proposal (NOT APPLIED)
+
 ## Notes
 
 - **Never commit** database dumps, secrets, or `.env` files
