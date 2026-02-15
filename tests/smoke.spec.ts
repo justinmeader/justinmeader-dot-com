@@ -38,3 +38,10 @@ test('primary navigation links respond', async ({ page }) => {
   expect(checked.size).toBeGreaterThan(0);
   expect(successful).toBeGreaterThan(0);
 });
+
+test('/about route is stable and accessible', async ({ page }) => {
+  const response = await page.goto('/about');
+  expect(response).not.toBeNull();
+  expect(response!.status()).toBeLessThan(400);
+  await expect(page).toHaveURL(/\/about/);
+});
