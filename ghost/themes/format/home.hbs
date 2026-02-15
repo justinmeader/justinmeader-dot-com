@@ -1,0 +1,32 @@
+{{!< default}}
+{{!-- The tag above means: insert everything in this file into the body of the default.hbs template --}}
+
+{{!-- Hero. --}}
+{{> "section/hero"
+	title=@custom.header_title
+	custom_excerpt=@custom.header_description
+	show_social_links=true
+}}
+
+{{!-- Featured. --}}
+{{#get "posts" include="tags,tiers" limit="20" filter="featured:true"}}
+	{{> "section/posts" class="section-featured" title=(t "Featured") hide_featured_icon=true style=@custom.featured_section_style}}
+{{/get}}
+
+{{!-- Tags. --}}
+{{#> "get-tags" setting=@custom.tags_list_above_posts}}
+	{{> "section/tags" title=(t "Tags") title_url=(t "/tags/") style=@custom.tags_section_style}}
+{{/"get-tags"}}
+
+{{!-- Latest posts. --}}
+{{#> "get-posts" limit=@config.posts_per_page}}
+	{{> "section/posts" class="section-posts" title=(t "Latest") title_url=(t "/writings/") show_search=true show_pagination=true style=@custom.posts_section_style}}
+{{/"get-posts"}}
+
+{{!-- Recommendations. --}}
+{{#if @custom.recommendations_count}}
+	{{> "section/recommendations" title=(t "Recommendations") title_url=(t "/recommendations/") limit=@custom.recommendations_count style=@custom.recommendations_section_style}}
+{{/if}}
+
+{{!-- Subscription. --}}
+{{> "section/subscription"}}

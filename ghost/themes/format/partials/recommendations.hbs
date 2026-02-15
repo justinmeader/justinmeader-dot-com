@@ -1,0 +1,27 @@
+{{#if recommendations}}
+	{{#foreach recommendations}}
+		<div class="card card-recommendation">
+			{{!-- Header. --}}
+			<div class="card-header">
+				<h2 class="card-title">
+					<a href="{{this.url}}" data-recommendation="{{id}}" target="_blank" rel="noopener">
+						{{#if favicon}}
+							<picture class="card-image">
+								<img src="{{favicon}}" alt="{{t "Favicon for {title}" title=title}}" width="22" height="22">
+							</picture>
+						{{/if}}
+
+						{{title}}
+					</a>
+				</h2>
+			</div>
+
+			{{!-- Content. --}}
+			{{#if description}}
+			<div class="card-content">
+				<p>{{description}}</p>
+			</div>
+			{{/if}}
+		</div>
+	{{/foreach}}
+{{/if}}

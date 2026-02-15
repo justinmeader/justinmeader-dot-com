@@ -1,0 +1,81 @@
+{{#* inline "section-posts"}}
+	{{#> "section/section"}}
+		{{!-- Header author (for page authors). --}}
+		{{#if show_card_author}}
+			{{> "component/card-author"}}
+		{{/if}}
+
+		{{!-- Button search (for page home). --}}
+		{{#if show_search}}
+			{{> "component/toggle-search"}}
+		{{/if}}
+
+		{{#> "section/wrapper"}}
+			{{#foreach posts}}
+				{{#match ../wrapper "slider"}}
+					<div class="swiper-slide">
+						{{> "component/card-post" style=../card_style hide_featured_icon=../hide_featured_icon}}
+					</div>
+				{{else}}
+					{{> "component/card-post" style=../card_style hide_featured_icon=../hide_featured_icon}}
+				{{/match}}
+			{{/foreach}}
+		{{/"section/wrapper"}}
+	{{/"section/section"}}
+{{/inline}}
+
+{{!-- Disabled. --}}
+{{#match style "Disabled"~}}
+
+{{!-- Slider. --}}
+{{~else match style "Slider"}}
+	{{> "section-posts" class=(concat class " " "section-cards-slider") wrapper="slider"}}
+
+{{!-- Slider Center. --}}
+{{else match style "Slider Center"}}
+	{{> "section-posts" class=(concat class " " "section-cards-slider-center") wrapper="slider" center=true}}
+
+{{!-- Marquee. --}}
+{{else match style "Marquee"}}
+	{{> "section-posts" class=(concat class " " "section-cards-marquee") wrapper="marquee" hide_title=true}}
+
+{{!-- Marquee Reverse. --}}
+{{else match style "Marquee Reverse"}}
+	{{> "section-posts" class=(concat class " " "section-cards-marquee") wrapper="marquee" hide_title=true reverse=true}}
+
+{{!-- Marquee Twin. --}}
+{{else match style "Marquee Twin"}}
+	{{> "section-posts" class=(concat class " " "section-cards-marquee") wrapper="marquee-twin" hide_title=true}}
+
+{{!-- Marquee Twin Reverse. --}}
+{{else match style "Marquee Twin Reverse"}}
+	{{> "section-posts" class=(concat class " " "section-cards-marquee") wrapper="marquee-twin" hide_title=true reverse=true}}
+
+{{!-- Cascade. --}}
+{{else match style "Cascade"}}
+	{{> "section-posts" class=(concat class " " "section-cards-cascade") wrapper="list" hide_title=true}}
+
+{{!-- Grid 2. --}}
+{{else match style "Grid 2"}}
+	{{> "section-posts" class=(concat class " " "section-cards-grid-2") wrapper="list"}}
+
+{{!-- Grid 3. --}}
+{{else match style "Grid 3"}}
+	{{> "section-posts" class=(concat class " " "section-cards-grid-3") wrapper="list"}}
+
+{{!-- List. --}}
+{{else match style "List"}}
+	{{> "section-posts" class=(concat class " " "section-cards-list") wrapper="list"}}
+
+{{!-- List Card. --}}
+{{else match style "List Card"}}
+	{{> "section-posts" class=(concat class " " "section-cards-list-cards") wrapper="list"}}
+
+{{!-- List Full. --}}
+{{else match style "Full"}}
+	{{> "section-posts" class=(concat class " " "section-cards-full") wrapper="list" card_style="full"}}
+
+{{!-- List Minimal. --}}
+{{else match style "List Minimal"}}
+	{{> "section-posts" class=(concat class " " "section-cards-list-minimal") wrapper="list" card_style="minimal"}}
+{{/match}}

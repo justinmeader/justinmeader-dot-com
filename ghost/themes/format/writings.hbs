@@ -1,0 +1,33 @@
+{{!< default}}
+{{!-- The tag above means: insert everything in this file into the body of the default.hbs template --}}
+
+{{!-- Add body class. --}}
+{{#contentFor "add-body-class"}} template-writings{{/contentFor}}
+
+{{!-- Everything inside the #page block pulls data from the page. --}}
+{{#page}}
+	{{!-- Hero. --}}
+	{{#if @page.show_title_and_feature_image}}
+		{{> "section/hero"}}
+	{{/if}}
+
+	{{!-- Content. --}}
+	{{> "post/content"}}
+{{else}}
+
+	{{!-- Default hero. --}}
+	{{> "section/hero" title=(t "Writings")}}
+{{/page}}
+
+{{!-- Tags. --}}
+{{#> "get-tags" setting=@custom.tags_list_above_posts}}
+	{{> "section/tags" title=(t "Tags") hide_title=true style=@custom.tags_style}}
+{{/"get-tags"}}
+
+{{!-- Posts. --}}
+{{#> "get-posts"}}
+	{{> "section/posts" title=(t "Posts") hide_title=true show_pagination=true style=@custom.posts_list_style}}
+{{/"get-posts"}}
+
+{{!-- Subscription. --}}
+{{> "section/subscription"}}

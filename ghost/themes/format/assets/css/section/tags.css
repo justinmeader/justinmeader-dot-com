@@ -1,0 +1,136 @@
+:where(.section-tags) {
+	ul {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--spacing-4);
+		padding: 0;
+		margin: 0;
+		list-style: none;
+	}
+
+	.button[style] {
+		gap: var(--spacing-4);
+
+		&::after {
+			content: '';
+			flex: 0 0 auto;
+			width: 4px;
+			height: 4px;
+			background-color: var(--tag--color);
+			border-radius: 50%;
+		}
+	}
+
+	.button.current {
+		--button--color: var(--color-background-100);
+		--button--background-color: var(--color-contrast);
+		--button-hover--color: var(--color-background-100);
+		--button-hover--background-color: var(--color-contrast);
+	}
+
+	> .screen-reader-text + .button {
+		margin-left: auto;
+	}
+}
+
+/* Buttons Center. */
+:where(.section-tags-buttons-center) ul {
+	justify-content: center;
+}
+
+/* Buttons Vertical. */
+:where(.section-tags-buttons-vertical) {
+	ul {
+		flex-direction: column;
+	}
+
+	.button {
+		width: 100%;
+	}
+
+	.count {
+		flex: 0 0 auto;
+		margin-left: auto;
+		color: var(--color-secondary);
+		font-size: 10px;
+		font-weight: var(--font-weight-semibold);
+		order: 1;
+	}
+}
+
+/* Slider Buttons. */
+:where(.section-tags-slider) {
+	> .button:first-child {
+		margin-left: auto;
+	}
+
+	div.swiper {
+		width: calc(100% + var(--padding-h) * 2);
+		padding: 0 var(--padding-h);
+		margin: 0 calc(var(--padding-h) * -1);
+	}
+
+	.swiper {
+		mask-image: linear-gradient(
+			90deg,
+			transparent 0%,
+			#000 var(--padding-h),
+			#000 calc(100% - var(--padding-h)),
+			transparent 100%
+		);
+
+		.swiper-wrapper {
+			flex-flow: nowrap;
+			width: max-content;
+			gap: var(--spacing-4);
+		}
+
+		.swiper-slide {
+			flex: 0 0 auto;
+			width: auto;
+		}
+	}
+
+	&:not(:has(> .swiper-initialized)) {
+		.slider-button {
+			display: none;
+		}
+
+		.swiper-wrapper {
+			overflow-x: auto;
+		}
+	}
+
+	.swiper-initialized > .swiper-wrapper {
+		gap: 0;
+	}
+
+	.button {
+		outline-offset: -2px;
+	}
+
+	/* Slider notification. */
+	.swiper-notification {
+		display: block;
+		padding-left: var(--spacing-3);
+		margin-top: var(--spacing-4);
+		color: var(--color-mute);
+		font-size: var(--font-small);
+		font-weight: var(--font-weight-medium);
+
+		&:empty {
+			display: none;
+		}
+	}
+}
+
+/* List with Posts. */
+:where(.section-tags-posts) {
+	> .section-list > .card ~ .card {
+		margin-top: var(--spacing-10);
+	}
+
+	> .section-list > .section {
+		margin-top: var(--spacing-7);
+	}
+}

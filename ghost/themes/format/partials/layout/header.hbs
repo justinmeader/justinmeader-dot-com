@@ -1,0 +1,113 @@
+{{!-- Button member. --}}
+{{#*inline "header-button-member"}}
+	{{#if @member}}
+		<a class="button button-link" href="#/portal/account">
+			<span class="label">{{t "Account"}}</span>
+		</a>
+	{{else if @site.members_enabled}}
+		<a class="button button-link" href="{{#match (t "/signin/") "!=" "false"}}{{t "/signin/"}}{{else}}#/portal/signin{{/match}}">
+			<span class="label">{{t "Sign in"}}</span>
+		</a>
+	{{/if}}
+{{/inline}}
+
+{{!-- Popup. --}}
+{{#*inline "header-popup"}}
+	<div class="popup popup-navigation" data-popup-id="popup-navigation" role="dialog" aria-modal="true" aria-hidden="true" aria-label="{{t "You can hide this popup with the ESC key"}}">
+		<div class="popup-content">
+			<div class="popup-header">
+				<div class="header-container container">
+					{{!-- Toggle popup. --}}
+					<button class="header-toggle button button-grey button-icon button-xs popup-close" aria-label="{{t 'Hide popup'}}">
+						{{> "icons/x"}}
+					</button>
+
+					{{!-- Logo. --}}
+					{{> "component/logo"}}
+
+					{{!-- Navigation. --}}
+					{{#if @site.navigation}}
+					<nav class="navigation navigation-bar" aria-label="{{t 'Popup Primary Navigation'}}">
+						{{navigation collapse=false}}
+					</nav>
+					{{/if}}
+				</div>
+			</div>
+
+			{{#if @site.navigation}}
+			<nav class="navigation navigation-popup container{{#if @site.secondary_navigation}} navigation-primary{{/if}}" aria-label="{{t 'Popup Mobile Primary Navigation'}}">
+				{{navigation collapse=true}}
+			</nav>
+			{{/if}}
+
+			{{#if @site.secondary_navigation}}
+			<nav class="navigation navigation-popup navigation-secondary container" aria-label="{{t 'Popup Secondary Navigation'}}">
+				{{navigation collapse=true type="secondary"}}
+			</nav>
+			{{/if}}
+
+			<div class="popup-footer">
+				<div class="container">
+					{{> "header-button-member"}}
+					{{> "component/toggle-color-scheme"}}
+				</div>
+			</div>
+		</div>
+
+		<button class="popup-close popup-overlay" aria-label="{{t 'Hide popup'}}" tabindex="-1"></button>
+	</div>
+{{/inline}}
+
+{{!-- Toggle popup. --}}
+{{#*inline "header-popup-toggle"}}
+	<button class="header-toggle button button-grey button-icon button-xs {{class}}" data-popup-toggle="#popup-navigation" aria-expanded="false" aria-label="{{t 'Open a popup with navigation'}}">
+		{{> "icons/burger"}}
+	</button>
+{{/inline}}
+
+{{!-- Classes. --}}
+{{#*inline "header-classes"}}
+	{{~#match @custom.header_style "Standard End"~}}
+		header-standard header-align-end
+	{{~else match @custom.header_style "Standard Center"~}}
+		header-standard header-align-center
+	{{~else match @custom.header_style "Standard Start"~}}
+		header-standard header-align-start
+	{{~else match @custom.header_style "Counter End"~}}
+		header-counter header-align-end
+	{{~else match @custom.header_style "Counter Center"~}}
+		header-counter header-align-center
+	{{~else match @custom.header_style "Counter Start"~}}
+		header-counter header-align-start
+	{{~/match~}}
+{{/inline}}
+
+{{!-- Header. --}}
+<header class="header {{> "header-classes"}}">
+	<div class="header-container container">
+		{{!-- Show popup if exist navigation-secondary or navigation. --}}
+		{{#if @site.secondary_navigation}}
+			{{> "header-popup"}}
+		{{else if @site.navigation}}
+			{{> "header-popup"}}
+		{{/if}}
+
+		{{!-- Logo. --}}
+		{{> "component/logo"}}
+
+		{{!-- Navigation. --}}
+		{{#if @site.navigation}}
+		<nav class="navigation navigation-bar" aria-label="{{t 'Primary Navigation'}}">
+			{{navigation collapse=false}}
+		</nav>
+		{{/if}}
+
+		{{!-- Toggle popup. --}}
+		{{#if @site.secondary_navigation}}
+			{{> "header-popup-toggle"}}
+		{{else if @site.navigation}}
+			{{!-- Hide toggle if there is no secondary-navigation --}}
+			{{> "header-popup-toggle" class="header-toggle-hide"}}
+		{{/if}}
+	</div>
+</header>

@@ -1,0 +1,9 @@
+<button
+	data-popup-toggle="{{#if popup_id}}#popup-{{popup_id}}{{else}}#popup-comments{{/if}}"
+	class="button button-icon button-grey button-xs post-comments-button"
+	aria-label="{{t 'Open a popup with comments'}}"
+	aria-expanded="false"
+>
+	{{> "icons/message"}}
+	<span>{{comment_count empty="" singular="" plural=""}}</span>
+</button>

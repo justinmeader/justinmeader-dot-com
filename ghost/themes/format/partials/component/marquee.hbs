@@ -1,0 +1,12 @@
+<div
+	class="marquee"
+	data-speed="{{#if speed}}{{speed}}{{else}}0.6{{/if}}"
+	data-start-duration="{{#if start_duration}}{{start_duration}}{{else}}2000{{/if}}"
+	data-hover-speed="{{#if hover_speed}}{{hover_speed}}{{else}}0.2{{/if}}"
+	data-hover-duration="{{#if hover_duration}}{{hover_duration}}{{else}}800{{/if}}"
+	data-direction="{{#if direction}}{{direction}}{{else}}left{{/if}}"
+>
+	<div class="marquee-inner">
+		{{> @partial-block}}
+	</div>
+</div>

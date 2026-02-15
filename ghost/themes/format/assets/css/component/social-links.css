@@ -1,0 +1,114 @@
+.social-links {
+	padding-left: 0;
+}
+
+:where(.social-links) {
+	--social--gap-v: var(--spacing-3);
+	--social--gap-h: var(--spacing-3);
+
+	display: flex;
+	gap: var(--social--gap-v) var(--social--gap-h);
+	margin: 0;
+	font-size: var(--font-small);
+	font-weight: var(--font-weight-medium);
+	list-style: none;
+
+	&:not(:has(li)) {
+		display: none;
+	}
+
+	.social-link {
+		display: block;
+		text-decoration: none;
+		transition:
+			color 0.15s ease,
+			background-color 0.15s ease;
+
+		> svg {
+			width: 1em;
+			height: 1em;
+		}
+	}
+}
+
+/* For hero */
+:where(.section-hero .social-links) {
+	flex-wrap: wrap;
+	margin: var(--spacing-2) 0;
+
+	.social-link {
+		display: flex;
+		align-items: center;
+		gap: var(--spacing-3);
+		min-height: var(--button-sm--min-height);
+		padding: var(--spacing-2) var(--spacing-6);
+		background-color: var(--color-background-300);
+		border-radius: var(--radius-1);
+	}
+
+	.social-link:hover,
+	.social-link:focus-visible {
+		color: var(--color-contrast);
+		background-color: var(--color-background-400);
+	}
+}
+
+/* For footer. */
+:where(.footer .social-links) {
+	--social--gap-v: var(--spacing-6);
+
+	flex-direction: column;
+
+	.social-link {
+		color: var(--color-secondary);
+
+		> svg {
+			display: none;
+		}
+	}
+
+	.social-link:hover,
+	.social-link:focus-visible {
+		color: var(--color-contrast);
+	}
+}
+
+/* For post card author. */
+:where(.post-author-card .social-links) {
+	--social--gap-v: var(--spacing-1);
+	--social--gap-h: var(--spacing-1);
+
+	flex-wrap: wrap;
+	margin: calc(var(--spacing-3) * -1) calc(var(--spacing-3) * -1) 0;
+
+	.social-link {
+		display: flex;
+		padding: var(--spacing-3);
+		min-width: var(--button-xs--min-height);
+		min-height: var(--button-xs--min-height);
+		border-radius: var(--button--border-radius);
+		transition: var(--button--transition);
+
+		> span {
+			position: absolute;
+			width: 1px;
+			height: 1px;
+			padding: 0;
+			margin: -1px;
+			overflow: hidden;
+			clip-path: inset(50%);
+			word-wrap: normal;
+		}
+
+		> svg {
+			width: var(--font-small);
+			height: var(--font-small);
+		}
+
+		&:hover,
+		&:focus-visible {
+			color: var(--color-contrast);
+			background-color: var(--color-background-400);
+		}
+	}
+}

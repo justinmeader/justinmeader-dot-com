@@ -1,0 +1,51 @@
+/* Style with side separators. */
+:where(
+	.section-cards-grid-2,
+	.section-cards-grid-3,
+	.section-cards-list-cards
+) {
+	.pagination {
+		display: flex;
+		align-items: center;
+		gap: var(--spacing-5);
+
+		&::before,
+		&::after {
+			content: '';
+			flex: 1 0 0%;
+			border-top: 1px solid var(--color-border);
+		}
+	}
+}
+
+/* Style outline. */
+:where(
+	.section-cards-cascade,
+	.section-cards-grid-2,
+	.section-cards-grid-3,
+	.section-cards-list-cards
+) {
+	.pagination-button {
+		--button--padding-h: var(--spacing-8);
+		--button--color: var(--color-contrast);
+		--button--background-color: transparent;
+		--button--border-radius: 2rem;
+		--button-hover--opacity: 1;
+
+		flex: 0 0 auto;
+		box-shadow: inset 0 0 0 1px var(--color-border);
+		transition:
+			var(--button--transition),
+			box-shadow 0.15s ease;
+		z-index: 1;
+
+		&:hover,
+		&:focus-visible {
+			box-shadow: inset 0 0 0 1px transparent;
+		}
+
+		&.complete {
+			box-shadow: none;
+		}
+	}
+}

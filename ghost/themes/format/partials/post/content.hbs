@@ -1,0 +1,21 @@
+{{#if html}}
+	<div class="post-content-wrapper{{#unless access}} post-content-teaser{{/unless}}">
+		{{#if isPost}}
+			{{^has tag="#hide-toc"}}
+				{{> "post/toc"}}
+			{{/has}}
+		{{else}}
+			{{#has tag="#toc"}}
+				{{> "post/toc"}}
+			{{/has}}
+		{{/if}}
+
+		<div class="post-content">
+			{{{html}}}
+		</div>
+	</div>
+{{/if}}
+
+{{#unless access}}
+	{{> "post/content-cta"}}
+{{/unless}}

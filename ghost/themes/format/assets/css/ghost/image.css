@@ -1,0 +1,10 @@
+.kg-gallery-image img,
+.kg-image-card img {
+	width: 100%;
+	border-radius: var(--radius-2);
+	background-color: var(--color-background-300);
+}
+
+.kg-image-card.kg-width-full img {
+	border-radius: 0;
+}

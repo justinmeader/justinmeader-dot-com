@@ -1,0 +1,13 @@
+{{!< default}}
+{{!-- The tag above means: insert everything in this file into the body of the default.hbs template --}}
+
+{{!-- Add body class. --}}
+{{#contentFor "add-body-class"}} page-error{{/contentFor}}
+
+<div class="card container">
+	<h1>{{statusCode}}. {{message}}</h1>
+	<p>{{t 'Oops! It seems like you’ve landed on a page that doesn’t exist.'}}</p>
+	<a href="{{@site.url}}" class="button">
+		<span class="label">{{t 'Back to Home'}}</span>
+	</a>
+</div>

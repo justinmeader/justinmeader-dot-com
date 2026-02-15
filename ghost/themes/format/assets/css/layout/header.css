@@ -1,0 +1,111 @@
+/* stylelint-disable at-rule-no-unknown */
+.header {
+	position: relative;
+	padding: 0 var(--padding-h);
+	margin-bottom: var(--spacing-10);
+
+	.logo {
+		position: relative;
+		z-index: 10;
+	}
+}
+
+/* Container. */
+.header-container {
+	display: flex;
+	align-items: center;
+	gap: var(--spacing-2) var(--spacing-4);
+	min-height: var(--header--min-height);
+}
+
+/* Navigation. */
+.header-container > .navigation {
+	display: flex;
+	justify-content: var(--header--align);
+	flex-basis: 0;
+	flex-grow: 1;
+	z-index: 10;
+
+	> ul {
+		justify-content: var(--header--align);
+	}
+}
+
+/* Align navigation. */
+.header-align-start {
+	--header--align: flex-start;
+}
+
+.header-align-center {
+	--header--align: center;
+}
+
+.header-align-end {
+	--header--align: flex-end;
+}
+
+/* Align dropdown. */
+.header-align-start .dropdown,
+.header-align-center .dropdown {
+	right: auto;
+	left: calc(var(--spacing-3) * -1);
+}
+
+.header-align-end .dropdown {
+	right: calc(var(--spacing-3) * -1);
+	left: auto;
+}
+
+/* Counter. */
+.header-counter {
+	.dropdown-toggle {
+		position: absolute;
+		top: calc(50% - 6px);
+		right: var(--navigation--link--padding-h);
+		margin: 0;
+		transform: translateX(calc((1.125rem - 12px) * -0.5));
+		background-color: var(--color-background-300);
+		z-index: 1;
+	}
+
+	.navigation-bar {
+		counter-reset: format-header-counter;
+
+		> ul > .nav-item {
+			counter-increment: format-header-counter;
+
+			> .nav-link::after {
+				content: counter(format-header-counter);
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				padding: 0 var(--spacing-3);
+				min-width: 1.125rem; /* 18px. */
+				min-height: 1.125rem; /* 18px. */
+				font-size: 0.625rem; /* 10px. */
+				font-weight: var(--font-weight-semibold);
+				background-color: var(--color-background-300);
+				border-radius: 3px;
+			}
+		}
+	}
+}
+
+/* Hide toggle if there is no secondary-navigation. */
+.header-toggle-hide {
+	display: none;
+}
+
+@media (--breakpoint-sm) {
+	.header-container > .navigation {
+		display: none;
+	}
+
+	.header-toggle {
+		margin-left: auto;
+	}
+
+	.header-toggle-hide {
+		display: inline-flex;
+	}
+}

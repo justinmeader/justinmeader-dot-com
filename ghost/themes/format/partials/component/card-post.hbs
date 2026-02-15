@@ -1,0 +1,127 @@
+{{!-- Full. --}}
+{{#match style "full"}}
+<article class="post{{#if tags}} {{#foreach tags visibility="all"}}tag-{{slug}}{{^if @last}} {{/if}}{{/foreach}}{{/if}}">
+	<header class="post-header container">
+		<h1 class="post-title"><a href="{{url}}">{{title}}</a></h1>
+
+		<div class="post-meta">
+			{{#primary_tag}}
+				<a class="post-tag" href="{{url}}"><span class="label">{{name}}</span></a>
+				<span>—</span>
+			{{/primary_tag}}
+			<time class="post-date" datetime="{{date format="YYYY-MM-DD"}}">{{date format="MMMM D, YYYY"}}</time>
+		</div>
+	</header>
+
+	{{!-- Featured wrapper. --}}
+	{{> "post/featured"}}
+
+	{{!-- Content. --}}
+	{{> "post/content"}}
+
+	{{!-- Footer. --}}
+	<div class="post-footer container">
+		{{#if tags}}
+		<nav class="navigation navigation-post-tags" aria-label="{{t "Post Tags Navigation"}}">
+			<ul class="post-tags">
+				{{#foreach tags}}
+					<li>
+						<a href="{{url}}" class="nav-link"><span class="label">{{name}}</span></a>
+					</li>
+				{{/foreach}}
+			</ul>
+		</nav>
+		{{/if}}
+
+		<div class="post-buttons">
+			{{#if comments}}
+				{{> "post/button-comments" popup_id=slug}}
+			{{/if}}
+			{{> "post/button-share"}}
+		</div>
+	</div>
+
+	{{#if comments}}
+	<div data-popup-id="popup-{{slug}}" class="popup popup-comments" role="dialog" aria-modal="true" aria-hidden="true" aria-label="{{t "You can hide this popup with the ESC key"}}">
+		{{> "post/comments"}}
+		<button class="popup-close popup-overlay" aria-label="{{t 'Hide popup'}}"></button>
+	</div>
+	{{/if}}
+</article>
+
+{{!-- Minimal. --}}
+{{else match style "minimal"}}
+<article class="card card-minimal">
+	<h2 class="card-title">
+		<a href="{{url}}">{{title}}</a>
+	</h2>
+	<span>
+		<time class="card-date" datetime="{{date format="YYYY-MM-DD"}}">{{date format="MMM DD"}}</time>
+		<span class="tooltip tooltip-top">{{date format="MMMM D, YYYY"}}</span>
+	</span>
+</article>
+
+{{!-- Standard. --}}
+{{else}}
+<article class="card card-post">
+	{{!-- Header. --}}
+	<div class="card-header">
+		<h2 class="card-title"><a href="{{url}}">{{title}}</a></h2>
+		<div class="card-meta">
+			{{#if primary_tag}}
+				<a class="card-primary-tag" href="{{primary_tag.url}}">{{primary_tag.name}}</a>
+				<span>—</span>
+			{{/if}}
+			<time class="card-date" datetime="{{date format="YYYY-MM-DD"}}">{{date format="MMMM D, YYYY"}}</time>
+		</div>
+	</div>
+
+	{{!-- Content. --}}
+	{{#if custom_excerpt}}
+	<div class="card-content">
+		<p>{{custom_excerpt}}</p>
+	</div>
+	{{else if excerpt}}
+	<div class="card-content">
+		<p>{{excerpt}}</p>
+	</div>
+	{{/if}}
+
+	{{!-- Footer. --}}
+	<div class="card-footer">
+		{{#unless hide_featured_icon}}
+			{{#if featured}}
+				<span class="card-icon">
+					{{> "icons/flame"}}
+					<span class="tooltip tooltip-top">{{t "Featured Post"}}</span>
+				</span>
+			{{/if}}
+		{{/unless}}
+		{{#has tag="#video"}}
+			<span class="card-icon">
+				{{> "icons/video"}}
+				<span class="tooltip tooltip-top">{{t "Video Post"}}</span>
+			</span>
+		{{/has}}
+		{{#unless access}}
+			<span class="card-icon">
+				{{> "icons/lock"}}
+				<span class="tooltip tooltip-top">
+					{{#has visibility="paid"}}
+						{{t "Paid Post"}}
+					{{else has visibility="tiers"}}
+						{{tiers}}
+					{{else}}
+						{{t "For Members"}}
+					{{/has}}
+				</span>
+			</span>
+		{{/unless}}
+
+		<a class="button button-grey button-xs card-button" href="{{url}}">
+			<span class="screen-reader-text">{{title}}</span>
+			<span class="label">{{t "Read More"}}</span>
+		</a>
+	</div>
+</article>
+{{/match}}

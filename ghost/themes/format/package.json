@@ -1,0 +1,312 @@
+{
+	"name": "format",
+	"version": "2.0.2",
+	"description": "Format is a newsletter and personal blog premium Ghost theme with a minimal layout.",
+	"keywords": [
+		"ghost",
+		"theme",
+		"ghost-theme"
+	],
+	"bugs": "https://github.com/priority-vision/format/issues",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/priority-vision/format.git"
+	},
+	"author": {
+		"name": "Priority Vision",
+		"email": "support@priority.vision",
+		"url": "https://www.priority.vision/"
+	},
+	"scripts": {
+		"build": "rollup -c --environment BUILD:production",
+		"build:prod": "npm run build && npm run translate && zippie format.zip",
+		"dev": "rollup -c --environment BUILD:development -w",
+		"pretest": "npm run build",
+		"test": "gscan .",
+		"test:ci": "gscan --fatal --verbose .",
+		"translate": "gtl c",
+		"postversion": "node scripts/update-version.mjs",
+		"version:major": "npm version major --no-git-tag-version",
+		"version:minor": "npm version minor --no-git-tag-version",
+		"version:patch": "npm version patch --no-git-tag-version"
+	},
+	"config": {
+		"card_assets": true,
+		"custom": {
+			"color_scheme": {
+				"type": "select",
+				"options": [
+					"Light",
+					"Dark",
+					"System"
+				],
+				"default": "System"
+			},
+			"display_color_scheme_toggle": {
+				"type": "boolean",
+				"default": true
+			},
+			"dark_mode_logo": {
+				"type": "image"
+			},
+			"header_style": {
+				"type": "select",
+				"options": [
+					"Standard End",
+					"Standard Center",
+					"Standard Start",
+					"Counter End",
+					"Counter Center",
+					"Counter Start"
+				],
+				"default": "Standard End"
+			},
+			"hero_style": {
+				"type": "select",
+				"options": [
+					"Standard",
+					"Center"
+				],
+				"default": "Standard",
+				"description": "Hero style for all pages except posts"
+			},
+			"posts_list_style": {
+				"type": "select",
+				"options": [
+					"Full",
+					"List",
+					"List Card",
+					"List Minimal",
+					"Grid 2",
+					"Grid 3"
+				],
+				"default": "List Card",
+				"description": "Post list style for writings, tag and author pages"
+			},
+			"tags_list_above_posts": {
+				"type": "text",
+				"default": "10",
+				"description": "Learn more here: https://www.priority.vision/docs/format/settings-homepage/sections/#tags-section"
+			},
+			"tags_page_displaying_tags": {
+				"type": "text",
+				"default": "-1",
+				"description": "Learn more here: https://www.priority.vision/docs/format/settings-sitewide/tags/"
+			},
+			"tags_style": {
+				"type": "select",
+				"options": [
+					"Buttons",
+					"Buttons Center",
+					"Buttons Vertical",
+					"Slider Buttons"
+				],
+				"default": "Buttons",
+				"description": "Style for tag page"
+			},
+			"subscription_form_title": {
+				"type": "text",
+				"default": "Subscribe to Newsletter"
+			},
+			"subscription_form_description": {
+				"type": "text",
+				"default": "Join me on this exciting journey as we explore the boundless world of web design together."
+			},
+			"footer_copyright": {
+				"type": "text"
+			},
+			"header_title": {
+				"type": "text",
+				"default": "Hi, I'm Neil Wilson",
+				"group": "homepage"
+			},
+			"header_description": {
+				"type": "text",
+				"default": "Join my blog and let’s learn, create, and grow together in the world of one of the most popular programming languages!",
+				"group": "homepage"
+			},
+			"featured_section_style": {
+				"type": "select",
+				"options": [
+					"Disabled",
+					"Slider",
+					"Slider Center",
+					"Marquee",
+					"Marquee Reverse",
+					"Marquee Twin",
+					"Marquee Twin Reverse",
+					"Cascade",
+					"Grid 2",
+					"Grid 3",
+					"List",
+					"List Card",
+					"List Minimal"
+				],
+				"default": "Slider",
+				"group": "homepage"
+			},
+			"tags_section_style": {
+				"type": "select",
+				"options": [
+					"Disabled",
+					"Slider",
+					"Slider Center",
+					"Slider Buttons",
+					"Marquee",
+					"Marquee Reverse",
+					"Marquee Twin",
+					"Marquee Twin Reverse",
+					"Cascade",
+					"Buttons",
+					"Buttons Center",
+					"Buttons Vertical",
+					"List",
+					"List Card",
+					"List Minimal",
+					"List with Posts"
+				],
+				"default": "Buttons",
+				"group": "homepage"
+			},
+			"posts_section_style": {
+				"type": "select",
+				"options": [
+					"Disabled",
+					"Slider",
+					"Slider Center",
+					"Marquee",
+					"Marquee Reverse",
+					"Marquee Twin",
+					"Marquee Twin Reverse",
+					"Cascade",
+					"Grid 2",
+					"Grid 3",
+					"List",
+					"List Card",
+					"List Minimal"
+				],
+				"default": "List",
+				"group": "homepage"
+			},
+			"recommendations_section_style": {
+				"type": "select",
+				"options": [
+					"Disabled",
+					"Slider",
+					"Slider Center",
+					"Marquee",
+					"Marquee Reverse",
+					"Marquee Twin",
+					"Marquee Twin Reverse",
+					"Cascade",
+					"Grid",
+					"Grid 2",
+					"Grid 3",
+					"List",
+					"List Card",
+					"List Minimal"
+				],
+				"default": "Grid",
+				"group": "homepage"
+			},
+			"recommendations_count": {
+				"type": "text",
+				"default": "4",
+				"group": "homepage",
+				"description": "Leave this option empty to hide the recommendations section."
+			},
+			"feature_image_aspect_ratio": {
+				"type": "select",
+				"options": [
+					"auto",
+					"1/1",
+					"4/3",
+					"3/2",
+					"2/3",
+					"16/9",
+					"21/9",
+					"9/16"
+				],
+				"default": "16/9",
+				"group": "post"
+			}
+		},
+		"image_sizes": {
+			"30": {
+				"width": 30
+			},
+			"60": {
+				"width": 60
+			},
+			"320": {
+				"width": 320
+			},
+			"500": {
+				"width": 500
+			},
+			"600": {
+				"width": 600
+			},
+			"1000": {
+				"width": 1000
+			}
+		},
+		"posts_per_page": 6
+	},
+	"browserslist": [
+		"defaults"
+	],
+	"dependencies": {
+		"geist": "^1.2.2",
+		"ivent": "^0.2.0",
+		"swiper": "^11.2.7",
+		"throttle-debounce": "^5.0.0"
+	},
+	"devDependencies": {
+		"@lehoczky/postcss-fluid": "^1.0.3",
+		"@rollup/plugin-commonjs": "^28.0.3",
+		"@rollup/plugin-node-resolve": "^16.0.1",
+		"@vercel/style-guide": "^6.0.0",
+		"esbuild": "^0.25.2",
+		"eslint": "^8.57.0",
+		"eslint-plugin-prettier": "^5.2.6",
+		"eslint-plugin-simple-import-sort": "^12.1.1",
+		"ghost-theme-locales": "^0.0.4",
+		"glob": "^11.0.1",
+		"gscan": "^4.47.0",
+		"postcss": "^8.5.3",
+		"postcss-import": "^16.1.0",
+		"postcss-mixins": "^11.0.3",
+		"postcss-nested": "^7.0.2",
+		"postcss-preset-env": "^10.1.5",
+		"prettier": "^3.5.3",
+		"rollup": "^4.39.0",
+		"rollup-plugin-copy": "^3.5.0",
+		"rollup-plugin-esbuild": "^6.2.1",
+		"rollup-plugin-livereload": "^2.0.5",
+		"rollup-plugin-postcss": "^4.0.2",
+		"stylelint": "^16.18.0",
+		"stylelint-config-standard": "^38.0.0",
+		"zippie": "^0.0.1"
+	},
+	"optionalDependencies": {
+		"pvs": "github:priority-vision/pvs#v1.6.11"
+	},
+	"engines": {
+		"ghost": ">=5.0.0"
+	},
+	"demo": "https://format.priority.vision/",
+	"docs": "https://www.priority.vision/docs/format/",
+	"gpm": {
+		"type": "theme",
+		"categories": [
+			"Blog",
+			"Personal",
+			"Minimal",
+			"Newsletter"
+		]
+	},
+	"screenshots": {
+		"desktop": "assets/screenshot-desktop.jpg"
+	}
+}

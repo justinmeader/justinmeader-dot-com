@@ -1,0 +1,26 @@
+{{#*inline "pagination-button"}}
+	<div class="pagination {{class}}">
+		<a
+			class="button pagination-button"
+			href="{{@site.url}}{{#if pagination_href}}{{pagination_href}}{{else}}{{page_url page}}{{/if}}"
+			data-pagination="{{#if type}}{{type}}{{else}}load-more{{/if}}"
+			{{#if append}}data-pagination-append="{{append}}"{{/if}}
+			{{#if prepend}}data-pagination-prepend="{{prepend}}"{{/if}}
+			{{#if from}}data-pagination-from="{{from}}"{{/if}}
+		>
+			<span class="label">{{label}}</span>
+			<span class="loader">{{> "icons/loader"}}</span>
+			{{#if append}}<span class="complete">{{t "You've reached the end of the list"}}</span>{{/if}}
+		</a>
+	</div>
+{{/inline}}
+
+{{#if append}}
+	{{#if next}}
+		{{> "pagination-button" class="pagination-next" label=(t 'Load More') page=next prepend=false}}
+	{{/if}}
+{{else}}
+	{{#if prev}}
+		{{> "pagination-button" class="pagination-prev" label=(t 'Previous Posts') page=prev append=false}}
+	{{/if}}
+{{/if}}

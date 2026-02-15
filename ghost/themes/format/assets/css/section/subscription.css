@@ -1,0 +1,44 @@
+/* stylelint-disable at-rule-no-unknown */
+
+.section-subscription {
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-6);
+	padding: var(--spacing-9) var(--spacing-10);
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius-2);
+
+	> h2,
+	> p,
+	> form {
+		width: 100%;
+	}
+
+	h2 {
+		@mixin heading-6;
+
+		padding: 0;
+		color: var(--color-contrast);
+		text-align: center;
+	}
+
+	p {
+		text-align: center;
+		margin-bottom: 0;
+	}
+}
+
+.form-subscribe {
+	padding: 0;
+	margin: var(--spacing-5) 0 var(--spacing-2);
+	border: 0;
+	border-radius: 0;
+	gap: var(--spacing-3);
+}
+
+@media (--breakpoint-xs) {
+	.section-subscription {
+		padding-right: var(--padding-h);
+		padding-left: var(--padding-h);
+	}
+}

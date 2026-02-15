@@ -1,0 +1,41 @@
+.post {
+	.kg-video-hide-animated > button {
+		visibility: hidden;
+	}
+
+	.kg-width-full.kg-video-card .kg-video-container {
+		border-radius: 0;
+	}
+
+	.kg-video-large-play-icon {
+		width: 2.75rem; /* 44px */
+		height: 2.75rem;
+
+		svg {
+			width: var(--font-x-small);
+		}
+	}
+
+	.kg-width-wide.kg-video-card .kg-video-large-play-icon {
+		width: 3.375rem; /* 54px */
+		height: 3.375rem;
+
+		svg {
+			width: var(--font-small);
+		}
+	}
+
+	.kg-width-full.kg-video-card .kg-video-large-play-icon {
+		width: 3.875rem; /* 62px */
+		height: 3.875rem;
+
+		svg {
+			width: 1rem;
+		}
+	}
+}
+
+.kg-video-card video {
+	background-color: var(--color-background-300);
+	border-radius: 0;
+}

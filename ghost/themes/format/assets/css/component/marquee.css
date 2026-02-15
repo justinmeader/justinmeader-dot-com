@@ -1,0 +1,27 @@
+.marquee {
+	display: flex;
+	overflow: hidden;
+	mask-image: linear-gradient(
+		90deg,
+		transparent 0%,
+		#000 200px,
+		#000 calc(100% - 200px),
+		transparent 100%
+	);
+
+	&[data-direction='right'] {
+		justify-content: flex-end;
+	}
+}
+
+.marquee-inner {
+	flex: 0 0 auto;
+	display: flex;
+	overflow: hidden;
+	width: min-content;
+	will-change: transform;
+
+	> * {
+		flex: 0 0 auto;
+	}
+}

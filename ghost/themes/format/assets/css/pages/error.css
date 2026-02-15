@@ -1,0 +1,28 @@
+/* stylelint-disable at-rule-no-unknown */
+
+.page-error {
+	.content {
+		margin-top: auto;
+		margin-bottom: auto;
+	}
+
+	header,
+	footer,
+	.scroll-progress-wrapper {
+		display: none;
+	}
+
+	.card {
+		padding: var(--spacing-7) var(--spacing-8);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-2);
+
+		p {
+			margin-bottom: 0;
+		}
+
+		.button {
+			margin: var(--spacing-2) 0;
+		}
+	}
+}

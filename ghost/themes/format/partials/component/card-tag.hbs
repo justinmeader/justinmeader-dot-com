@@ -1,0 +1,21 @@
+<div class="card card-tag">
+	<div class="card-header">
+		{{#if feature_image }}
+			{{> "component/image" size="30" class="card-image" src=feature_image alt=name}}
+		{{/if}}
+
+		<h2 class="card-title">
+			<a href="{{#if tag_url}}{{tag_url}}{{else}}{{url}}{{/if}}">{{name}}</a>
+		</h2>
+
+		<span class="card-count">
+			{{plural count empty=(t "0 posts") singular=(t "% post") plural=(t "% posts")}}
+		</span>
+	</div>
+
+	{{#if description}}
+	<div class="card-content">
+		<p>{{description}}</p>
+	</div>
+	{{/if}}
+</div>

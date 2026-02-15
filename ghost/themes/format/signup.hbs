@@ -1,0 +1,67 @@
+{{!< default}}
+{{!-- The tag above means: insert everything in this file into the body of the default.hbs template --}}
+
+{{!-- Add body class. --}}
+{{#contentFor "add-body-class"}} template-signup{{/contentFor}}
+
+{{#> "layout/account"}}
+	{{!-- Everything inside the #page block pulls data from the page. --}}
+	{{#page}}
+
+		{{!-- Hero. --}}
+		{{#if @page.show_title_and_feature_image}}
+			{{> "section/hero"}}
+		{{/if}}
+	{{else}}
+
+		{{!-- Invite only. --}}
+		{{#if @site.members_invite_only}}
+			{{> "section/hero"
+				title=(t "Sign up")
+				custom_excerpt=(t "New registrations are temporarily closed. If you already have an account, please sign in to access your reading space.")
+			}}
+
+		{{!-- Access. --}}
+		{{else if @site.members_enabled}}
+			{{> "section/hero"
+				title=(t "Sign up")
+				custom_excerpt=(t "Unlock full access and see the entire library of members-only content & updates.")
+			}}
+
+		{{!-- Nobody. --}}
+		{{else}}
+			{{> "section/hero"
+				title=(t "Sign up")
+				custom_excerpt=(t "Our blog's authentication system is currently under maintenance. In the meantime, you can still enjoy our public articles.")
+			}}
+		{{/if}}
+	{{/page}}
+
+	{{!-- Content. --}}
+	<div class="post-content" style="margin-top: 0">
+		{{#page}}{{html}}{{/page}}
+
+		{{!-- Form. --}}
+		{{#if @site.members_enabled}}
+			{{^if @site.members_invite_only}}
+				<form data-members-form="signup">
+					<label for="name">{{t 'Your name'}}</label>
+					<input data-members-name type="text" id="name" />
+					<label for="email">{{t 'Your email'}}</label>
+					<input data-members-email type="email" id="email" required />
+					<button type="submit">
+						<span class="label">{{t "Sign up"}}</span>
+						{{> "icons/loader"}}
+					</button>
+
+					<span class="form-alert">
+						<span class="success">{{t "Success! Check your inbox for our email."}}</span>
+						<span data-members-error class="error"></span>
+					</span>
+				</form>
+			{{/if}}
+
+			<p>{{t "Already a member?"}} <a href="{{#match (t "/signin/") "!=" "false"}}{{t "/signin/"}}{{else}}#/portal/signin{{/match}}">{{t "Sign in"}}</a></p>
+		{{/if}}
+	</div>
+{{/"layout/account"}}

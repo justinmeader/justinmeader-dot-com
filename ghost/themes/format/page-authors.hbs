@@ -1,0 +1,36 @@
+{{!< default}}
+{{!-- The tag above means: insert everything in this file into the body of the default.hbs template --}}
+
+{{!-- Everything inside the #page block pulls data from the page. --}}
+{{#page}}
+
+	{{!-- Hero. --}}
+	{{#if @page.show_title_and_feature_image}}
+		{{> "section/hero"}}
+	{{/if}}
+
+	{{!-- Content. --}}
+	{{> "post/content"}}
+{{/page}}
+
+{{!-- Posts. --}}
+{{#get "authors" include="count.posts" limit="100" order="count.posts DESC"}}
+	{{#foreach authors}}
+		{{#get "posts" include="tags,tiers" filter="authors:{{slug}}" limit="4"}}
+			{{> "section/posts"
+				title=(t "Posts by {author}" author=../name)
+				hide_title=true
+				author_url=../url
+				name=../name
+				profile_image=../profile_image
+				bio=../bio
+				count=../count.posts
+				show_card_author=true
+				style="List"
+			}}
+		{{/get}}
+	{{/foreach}}
+{{/get}}
+
+{{!-- Subscription. --}}
+{{> "section/subscription"}}

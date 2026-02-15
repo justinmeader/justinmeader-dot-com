@@ -1,0 +1,13 @@
+<{{#if title}}section{{else}}div{{/if}} class="section container{{#if class}} {{class}}{{/if}}">
+	{{#if title}}
+	<h2 class="{{#if hide_title}}screen-reader-text{{else}}section-title{{/if}}">
+		{{#if title_url}}
+			<a href="{{title_url}}" aria-label="{{title}}">{{title}}</a>
+		{{else}}
+			{{title}}
+		{{/if}}
+	</h2>
+	{{/if}}
+
+	{{> @partial-block }}
+</{{#if title}}section{{else}}div{{/if}}>

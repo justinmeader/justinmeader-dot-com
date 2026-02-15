@@ -1,0 +1,158 @@
+{{!-- Button. --}}
+{{#*inline "button"}}
+	<a class="button button-sm button-grey{{#has slug=page_slug}} current{{/has}}" href="{{url}}"{{#if accent_color}} style="--tag--color: {{accent_color}};"{{/if}}>
+		<span class="label">{{name}}</span>
+		{{#if show_count}}
+		<span class="count">{{plural count.posts empty=(t "0 posts") singular=(t "% post") plural=(t "% posts")}}</span>
+		{{/if}}
+	</a>
+{{/inline}}
+
+{{!-- List Cards. --}}
+{{#*inline "list-cards"}}
+	{{#foreach tags}}
+		{{#match ../wrapper "slider"}}
+			<div class="swiper-slide">{{> "component/card-tag" count=count.posts}}</div>
+		{{else}}
+			{{> "component/card-tag" count=count.posts}}
+		{{/match}}
+	{{/foreach}}
+{{/inline}}
+
+{{!-- List Buttons. --}}
+{{#*inline "list-buttons"}}
+	{{#if ul}}
+		<ul>{{#foreach tags}}<li>{{> "button" show_count=../show_count page_slug=../slug}}</li>{{/foreach}}</ul>
+	{{else}}
+		{{#foreach tags}}
+			{{#match ../wrapper "slider-buttons"}}
+				<div class="swiper-slide">{{> "button" show_count=../show_count page_slug=../slug}}</div>
+			{{else}}
+				{{> "button" show_count=../show_count page_slug=../slug}}
+			{{/match}}
+		{{/foreach}}
+	{{/if}}
+{{/inline}}
+
+{{!-- List Posts. --}}
+{{#*inline "list-posts"}}
+	{{#foreach tags}}
+		{{> "component/card-tag" count=count.posts}}
+
+		{{#get "posts" include="tags,tiers" filter="tag:{{slug}}" limit="4"}}
+			{{> "section/posts"
+				title=(t "Posts tagged with {tag}" tag=../name)
+				hide_title=true
+				tag_url=../url
+				name=../name
+				feature_image=../feature_image
+				description=../description
+				count=../count.posts
+				style="List"
+			}}
+		{{/get}}
+	{{/foreach}}
+{{/inline}}
+
+{{!-- Section. --}}
+{{#*inline "section-tags"}}
+	{{#> "section/section" class=(concat "section-tags" " " class)}}
+		{{#> "section/wrapper"}}{{> @partial-block}}{{/"section/wrapper"}}
+	{{/"section/section"}}
+{{/inline}}
+
+{{#if tags}}
+	{{!-- Disabled. --}}
+	{{#match style "Disabled"~}}
+
+	{{!-- Slider. --}}
+	{{~else match style "Slider"}}
+		{{#> "section-tags" class="section-cards-slider" wrapper="slider"}}
+			{{> "list-cards"}}
+		{{/"section-tags"}}
+
+	{{!-- Slider Center. --}}
+	{{else match style "Slider Center"}}
+		{{#> "section-tags" class="section-cards-slider-center" wrapper="slider" center=true}}
+			{{> "list-cards"}}
+		{{/"section-tags"}}
+
+	{{!-- Slider Buttons. --}}
+	{{else match style "Slider Buttons"}}
+		{{#> "section-tags" class="section-tags-slider" wrapper="slider-buttons"}}
+			{{> "list-buttons"}}
+		{{/"section-tags"}}
+
+	{{!-- Marquee --}}
+	{{else match style "Marquee"}}
+		{{#> "section-tags" hide_title=true class="section-cards-marquee" wrapper="marquee" hide_title=true}}
+			{{> "list-cards"}}
+		{{/"section-tags"}}
+
+	{{!-- Marquee Reverse. --}}
+	{{else match style "Marquee Reverse"}}
+		{{#> "section-tags" hide_title=true class="section-cards-marquee" wrapper="marquee" hide_title=true reverse=true}}
+			{{> "list-cards"}}
+		{{/"section-tags"}}
+
+	{{!-- Marquee Twin. --}}
+	{{else match style "Marquee Twin"}}
+		{{#> "section-tags" hide_title=true class="section-cards-marquee" wrapper="marquee-twin" hide_title=true}}
+			{{> "list-cards"}}
+		{{/"section-tags"}}
+
+	{{!-- Marquee Twin Reverse. --}}
+	{{else match style "Marquee Twin Reverse"}}
+		{{#> "section-tags" hide_title=true class="section-cards-marquee" wrapper="marquee-twin" hide_title=true reverse=true}}
+			{{> "list-cards"}}
+		{{/"section-tags"}}
+
+	{{!-- Cascade. --}}
+	{{else match style "Cascade"}}
+		{{#> "section-tags" class="section-tags-cascade" wrapper="list" hide_title=true}}
+			{{> "list-cards"}}
+		{{/"section-tags"}}
+
+	{{!-- Buttons. --}}
+	{{else match style "Buttons"}}
+		{{#> "section-tags" class="section-tags-buttons" wrapper="list"}}
+			{{> "list-buttons" ul=true}}
+		{{/"section-tags"}}
+
+	{{!-- Buttons Center. --}}
+	{{else match style "Buttons Center"}}
+		{{#> "section-tags" class="section-tags-buttons section-tags-buttons-center" wrapper="list"}}
+			{{> "list-buttons" ul=true}}
+		{{/"section-tags"}}
+
+	{{!-- Buttons Vertical. --}}
+	{{else match style "Buttons Vertical"}}
+		{{#> "section-tags" class="section-tags-buttons section-tags-buttons-vertical" wrapper="list"}}
+			{{> "list-buttons" ul=true show_count=true}}
+		{{/"section-tags"}}
+
+	{{!-- List. --}}
+	{{else match style "List"}}
+		{{#> "section-tags" class="section-cards-list" wrapper="list"}}
+			{{> "list-cards"}}
+		{{/"section-tags"}}
+
+	{{!-- List Card. --}}
+	{{else match style "List Card"}}
+		{{#> "section-tags" class="section-cards-list-cards" wrapper="list"}}
+			{{> "list-cards"}}
+		{{/"section-tags"}}
+
+	{{!-- List Minimal. --}}
+	{{else match style "List Minimal"}}
+		{{#> "section-tags" class="section-cards-list-minimal" wrapper="list"}}
+			{{> "list-cards"}}
+		{{/"section-tags"}}
+
+	{{!-- List with Posts. --}}
+	{{else match style "List with Posts"}}
+		{{#> "section-tags" hide_title=true class="section-tags-posts" wrapper="list"}}
+			{{> "list-posts"}}
+		{{/"section-tags"}}
+	{{/match}}
+{{/if}}

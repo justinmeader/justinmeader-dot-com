@@ -1,0 +1,16 @@
+.button-share {
+	display: flex;
+
+	.dropdown {
+		min-width: 190px;
+	}
+
+	.nav-link {
+		position: relative;
+	}
+
+	&:hover .tooltip:not(.show) {
+		opacity: 0;
+		visibility: hidden;
+	}
+}

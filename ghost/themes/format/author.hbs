@@ -1,0 +1,20 @@
+{{!< default}}
+{{!-- The tag above means: insert everything in this file into the body of the default.hbs template --}}
+
+{{!-- Everything inside the #author block pulls data from the page. --}}
+{{#author}}
+
+	{{!-- Hero. --}}
+	{{> "section/hero"
+		title=name
+		custom_excerpt=bio
+		count_posts=../pagination.total
+		show_author_links=true
+	}}
+{{/author}}
+
+{{!-- Posts. --}}
+{{> "section/posts" title=(t "Posts by {author}" author=author.name) hide_title=true show_pagination=true style=@custom.posts_list_style}}
+
+{{!-- Subscription. --}}
+{{> "section/subscription"}}

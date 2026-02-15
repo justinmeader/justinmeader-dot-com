@@ -1,0 +1,13 @@
+<form class="form-subscribe" data-members-form="subscribe">
+	<input type="email" placeholder="{{t "Type your email..."}}" required data-members-email>
+	<button class="button" type="submit">
+		<span class="label">{{t "Subscribe"}}</span>
+		{{> "icons/loader"}}
+		{{> "icons/check"}}
+	</button>
+
+	<span class="form-alert">
+		<span class="success">{{t "Please check your inbox and click the confirmation link."}}</span>
+		<span class="error" data-members-error></span>
+	</span>
+</form>

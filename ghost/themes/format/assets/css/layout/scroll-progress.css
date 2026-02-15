@@ -1,0 +1,129 @@
+/* stylelint-disable at-rule-no-unknown */
+
+.scroll-progress {
+	--scroll-progress--size: 22px;
+
+	position: fixed;
+	display: flex;
+	align-items: center;
+	bottom: var(--padding-h);
+	right: var(--padding-h);
+	color: var(--color-contrast);
+	backdrop-filter: blur(5px);
+	border-radius: 50%;
+	opacity: 0;
+	visibility: hidden;
+	z-index: 3;
+	transition:
+		opacity 0.2s ease,
+		visibility 0.2s ease;
+
+	circle {
+		stroke-dasharray: 300%;
+		stroke-dashoffset: calc(300% + var(--scroll-progress) * 3);
+		stroke-linecap: round;
+		stroke-width: 1.5px;
+		transform: rotate(-90deg) translateX(-100%);
+
+		/* 0.75px - svg stroke-width="1.5" */
+		r: calc(22px * 0.5 - 0.75px);
+	}
+
+	> svg {
+		position: relative;
+		display: block;
+		width: var(--scroll-progress--size);
+		height: var(--scroll-progress--size);
+		pointer-events: none;
+		z-index: 1;
+		opacity: 1;
+		transform: scaleX(-1);
+		transition: opacity 0.2s ease;
+	}
+}
+
+.scroll-progress-button {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: var(--scroll-progress--size);
+	height: var(--scroll-progress--size);
+	padding: 0;
+	margin-right: calc(var(--scroll-progress--size) * -1);
+	cursor: pointer;
+	border: 1.5px solid var(--color-border);
+	border-radius: 50%;
+	outline-offset: 3px;
+	background-color: transparent;
+	transition:
+		color 0.1s ease,
+		background-color 0.1s ease,
+		border-color 0.1s ease,
+		transform 0.2s ease;
+
+	> svg {
+		width: var(--font-small);
+		height: var(--font-small);
+	}
+
+	&:hover,
+	&:focus {
+		color: var(--color-background);
+		background-color: var(--color-contrast);
+		border-color: var(--color-contrast);
+
+		+ svg {
+			opacity: 0;
+		}
+	}
+}
+
+.scroll-progress-has-time {
+	padding: var(--spacing-2);
+	border-radius: 2rem;
+	background-color: var(--color-background-300);
+	font-weight: var(--font-weight-medium);
+
+	.scroll-progress-button::before {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+	}
+}
+
+.scroll-progress-time {
+	margin: 0 var(--spacing-4);
+	font-size: var(--font-x-small);
+	color: var(--color-secondary);
+}
+
+.scroll-progress-show {
+	visibility: visible;
+	opacity: 1;
+}
+
+@media (--breakpoint-sm) {
+	.scroll-progress-wrapper {
+		position: sticky;
+		display: flex;
+		justify-content: flex-end;
+		align-self: center;
+		bottom: var(--padding-h);
+		right: 0;
+		width: calc(var(--container--width) + var(--padding-h) * 2);
+		padding: 0 var(--padding-h);
+		margin-top: var(--padding-h);
+		margin-bottom: calc(var(--spacing-10) * -1 + var(--padding-h));
+		max-width: 100%;
+		pointer-events: none;
+		z-index: 3;
+	}
+
+	.scroll-progress {
+		position: static;
+		pointer-events: visible;
+	}
+}

@@ -1,0 +1,13 @@
+{{#if posts}}
+	{{> @partial-block}}
+{{else}}
+	{{#if pagination}}
+		{{#get "posts" include="tags,tiers" limit=@config.posts_per_page page=pagination.page}}
+			{{> @partial-block}}
+		{{/get}}
+	{{else}}
+		{{#get "posts" include="tags,tiers" limit=@config.posts_per_page page=1}}
+			{{> @partial-block}}
+		{{/get}}
+	{{/if}}
+{{/if}}

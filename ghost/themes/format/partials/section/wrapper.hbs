@@ -1,0 +1,77 @@
+{{!-- List. --}}
+{{#*inline "list"}}
+	<div class="section-list">
+		{{#if show_pagination}}
+			{{pagination type="load-more-infinite" prepend=".posts-list"}}
+			<div class="posts-list">{{> @partial-block}}</div>
+			{{pagination type="load-more-infinite" append=".posts-list"}}
+		{{else}}
+			{{> @partial-block}}
+		{{/if}}
+	</div>
+{{/inline}}
+
+{{!-- Marquee. --}}
+{{#*inline "marquee"}}
+	{{#if reverse}}
+		{{#> "component/marquee" direction="right"}}{{> @partial-block}}{{/"component/marquee"}}
+	{{else}}
+		{{#> "component/marquee"}}{{> @partial-block}}{{/"component/marquee"}}
+	{{/if}}
+{{/inline}}
+
+{{!-- Marquee twin. --}}
+{{#*inline "marquee-twin"}}
+	{{#if reverse}}
+		{{#> "component/marquee" speed="0.4" direction="right"}}{{> @partial-block}}{{/"component/marquee"}}
+		{{#> "component/marquee" speed="0.4"}}{{> @partial-block}}{{/"component/marquee"}}
+	{{else}}
+		{{#> "component/marquee" speed="0.4"}}{{> @partial-block}}{{/"component/marquee"}}
+		{{#> "component/marquee" speed="0.4" direction="right"}}{{> @partial-block}}{{/"component/marquee"}}
+	{{/if}}
+{{/inline}}
+
+{{!-- Slider Cards. --}}
+{{#*inline "slider-cards"}}
+	<button class="button button-sm button-transparent button-icon slider-button slider-button-prev" aria-label={{t "Previous slide"}}>{{> "icons/chevron-left"}}</button>
+	<button class="button button-sm button-transparent button-icon slider-button slider-button-next" aria-label={{t "Next slide"}}>{{> "icons/chevron-right"}}</button>
+	<div
+		class="swiper"
+		data-effect="cards"
+		data-grab-cursor="true"
+		data-touch-ratio="0.3"
+		{{#if center}}
+			data-loop="true"
+			data-centered-slides="true"
+		{{/if}}
+	>
+		<div class="swiper-wrapper">{{> @partial-block}}</div>
+	</div>
+{{/inline}}
+
+{{!-- Slider Buttons. --}}
+{{#*inline "slider-buttons"}}
+	<button class="button button-sm button-transparent button-icon slider-button slider-button-prev swiper-button-prev" aria-label="{{t "Previous slide"}}">{{> "icons/chevron-left"}}</button>
+	<button class="button button-sm button-transparent button-icon slider-button slider-button-next swiper-button-next" aria-label="{{t "Next slide"}}">{{> "icons/chevron-right"}}</button>
+	<div
+		class="swiper"
+		data-slides-per-view="auto"
+		data-space-between="8"
+		data-free-mode="true"
+	>
+		<div class="swiper-wrapper">{{> @partial-block}}</div>
+	</div>
+{{/inline}}
+
+{{!-- Wrapper. --}}
+{{#match wrapper "slider"}}
+	{{#> "slider-cards"}}{{> @partial-block}}{{/"slider-cards"}}
+{{else match wrapper "slider-buttons"}}
+	{{#> "slider-buttons"}}{{> @partial-block}}{{/"slider-buttons"}}
+{{else match wrapper "marquee"}}
+	{{#> "marquee"}}{{> @partial-block}}{{/"marquee"}}
+{{else match wrapper "marquee-twin"}}
+	{{#> "marquee-twin"}}{{> @partial-block}}{{/"marquee-twin"}}
+{{else}}
+	{{#> "list"}}{{> @partial-block}}{{/"list"}}
+{{/match}}

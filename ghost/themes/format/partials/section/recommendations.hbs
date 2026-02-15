@@ -1,0 +1,65 @@
+{{#*inline "section-rec"}}
+	{{#match @site.recommendations_enabled}}
+		{{#> "section/section" class=(concat "section-recommendations" " " class)}}
+			{{#> "section/wrapper"}}
+				{{recommendations limit=../limit}}
+			{{/"section/wrapper"}}
+		{{/"section/section"}}
+	{{/match}}
+{{/inline}}
+
+{{!-- Disabled. --}}
+{{#match style "Disabled"}}
+
+{{!-- Slider. --}}
+{{else match style "Slider"}}
+	{{> "section-rec" class="section-cards-slider" wrapper="slider"}}
+
+{{!-- Slider Center. --}}
+{{else match style "Slider Center"}}
+	{{> "section-rec" class="section-cards-slider" wrapper="slider" center=true}}
+
+{{!-- Marquee. --}}
+{{else match style "Marquee"}}
+	{{> "section-rec" class="section-cards-marquee" wrapper="marquee" hide_title=true}}
+
+{{!-- Marquee Reverse. --}}
+{{else match style "Marquee Reverse"}}
+	{{> "section-rec" class="section-cards-marquee" wrapper="marquee" hide_title=true reverse=true}}
+
+{{!-- Marquee Twin. --}}
+{{else match style "Marquee Twin"}}
+	{{> "section-rec" class="section-cards-marquee" wrapper="marquee-twin" hide_title=true}}
+
+{{!-- Marquee Twin Reverse. --}}
+{{else match style "Marquee Twin Reverse"}}
+	{{> "section-rec" class="section-cards-marquee" wrapper="marquee-twin" hide_title=true reverse=true}}
+
+{{!-- Cascade. --}}
+{{else match style "Cascade"}}
+	{{> "section-rec" class="section-cards-cascade" wrapper="list" hide_title=true}}
+
+{{!-- Grid. --}}
+{{else match style "Grid"}}
+	{{> "section-rec" class="section-cards-grid" wrapper="list"}}
+
+{{!-- Grid 2. --}}
+{{else match style "Grid 2"}}
+	{{> "section-rec" class="section-cards-grid-2" wrapper="list"}}
+
+{{!-- Grid 3. --}}
+{{else match style "Grid 3"}}
+	{{> "section-rec" class="section-cards-grid-3" wrapper="list"}}
+
+{{!-- List. --}}
+{{else match style "List"}}
+	{{> "section-rec" class="section-cards-list" wrapper="list"}}
+
+{{!-- List Card. --}}
+{{else match style "List Card"}}
+	{{> "section-rec" class="section-cards-list-cards" wrapper="list"}}
+
+{{!-- List Minimal. --}}
+{{else match style "List Minimal"}}
+	{{> "section-rec" class="section-cards-list-minimal" wrapper="list" card_style="minimal"}}
+{{/match}}

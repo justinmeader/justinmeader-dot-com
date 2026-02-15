@@ -1,0 +1,21 @@
+<div class="card card-author">
+	<div class="card-header">
+		{{#if profile_image}}
+			{{> "component/image" size="30" class="card-image" src=profile_image alt=name}}
+		{{/if}}
+
+		<h2 class="card-title">
+			<a href="{{#if author_url}}{{author_url}}{{else}}{{url}}{{/if}}">{{name}}</a>
+		</h2>
+
+		<span class="card-count">
+			{{plural count empty=(t "0 posts") singular=(t "% post") plural=(t "% posts")}}
+		</span>
+	</div>
+
+	{{#if bio}}
+	<div class="card-content">
+		<p>{{bio}}</p>
+	</div>
+	{{/if}}
+</div>

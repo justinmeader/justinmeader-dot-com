@@ -1,0 +1,86 @@
+/* stylelint-disable at-rule-no-unknown */
+
+.post-content {
+	.kg-bookmark-card {
+		position: relative;
+	}
+
+	.kg-bookmark-card a.kg-bookmark-container {
+		background-color: var(--color-background);
+		border: 0;
+		border-radius: var(--radius-2);
+		transition: background-color 0.15s ease;
+
+		/* Border. */
+		&::before {
+			content: '';
+			position: absolute;
+			inset: 0;
+			pointer-events: none;
+			border: 1px solid var(--color-border);
+			border-radius: inherit;
+			z-index: 1;
+		}
+
+		&:hover {
+			border: 0;
+			background-color: var(--color-background-200);
+			border-radius: var(--radius-2);
+		}
+	}
+
+	.kg-bookmark-container {
+		padding: var(--spacing-7) var(--spacing-8);
+		gap: var(--spacing-6);
+	}
+
+	.kg-bookmark-thumbnail {
+		margin-top: calc(var(--spacing-7) * -1);
+		margin-right: calc(var(--spacing-8) * -1);
+		margin-bottom: calc(var(--spacing-7) * -1);
+		background-color: var(--color-background-300);
+	}
+
+	.kg-bookmark-content {
+		padding: 0;
+		gap: var(--spacing-4);
+	}
+
+	.kg-bookmark-title {
+		@mixin heading-6;
+
+		display: -webkit-box;
+		overflow: hidden;
+		color: var(--color-contrast);
+		-webkit-line-clamp: 1;
+		-webkit-box-orient: vertical;
+	}
+
+	.kg-bookmark-description {
+		-webkit-line-clamp: 3;
+		max-height: none;
+		color: var(--color-foreground);
+		font-size: var(--font-small);
+		line-height: inherit;
+		opacity: 1;
+	}
+
+	.kg-bookmark-metadata {
+		margin-top: 0;
+		color: var(--color-contrast);
+		font-size: var(--font-small);
+		font-weight: var(--font-weight-medium);
+	}
+
+	.kg-bookmark-icon {
+		margin-right: var(--spacing-4);
+	}
+
+	.kg-bookmark-metadata > span:nth-of-type(2)::before {
+		content: '-';
+	}
+
+	.kg-bookmark-metadata > :not(img) {
+		opacity: 1;
+	}
+}

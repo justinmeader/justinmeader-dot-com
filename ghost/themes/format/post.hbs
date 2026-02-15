@@ -1,0 +1,87 @@
+{{!< default}}
+{{!-- The tag above means: insert everything in this file into the body of the default.hbs template --}}
+
+{{!-- Everything inside the #post block pulls data from the page. --}}
+{{#post}}
+
+{{!-- Post. --}}
+<article class="post">
+	<header class="post-header container">
+		<h1 class="post-title">{{title}}</h1>
+
+		<div class="post-meta">
+			{{#primary_tag}}
+				<a class="post-tag" href="{{url}}"><span class="label">{{name}}</span></a>
+				<span>—</span>
+			{{/primary_tag}}
+			<time class="post-date" datetime="{{date format="YYYY-MM-DD"}}">{{date format="MMMM D, YYYY"}}</time>
+		</div>
+	</header>
+
+	{{!-- Featured wrapper. --}}
+	{{> "post/featured"}}
+
+	{{!-- Content. --}}
+	{{> "post/content" isPost="true"}}
+
+	{{!-- Footer. --}}
+	<div class="post-footer container">
+		{{#if tags}}
+		<nav class="navigation navigation-post-tags" aria-label="{{t "Post Tags Navigation"}}">
+			<ul class="post-tags">
+				{{#foreach tags}}
+					<li>
+						<a href="{{url}}" class="nav-link"><span class="label">{{name}}</span></a>
+					</li>
+				{{/foreach}}
+			</ul>
+		</nav>
+		{{/if}}
+
+		<div class="post-buttons">
+			{{#if comments}}
+				{{> "post/button-comments"}}
+			{{/if}}
+			{{> "post/button-share"}}
+		</div>
+	</div>
+
+	{{!-- Author card. --}}
+	{{#if access}}
+	{{#primary_author}}
+	{{#> "section/section" title=(t "Author") title_url=url class="post-author"}}
+		<div class="post-author-card">
+			<a class="post-author-link" href="{{url}}" tabindex="-1" aria-label="{{name}}">
+				{{> "component/image" class="post-author-image" size="30" src=profile_image alt=name}}
+				<span class="label">{{name}}</span>
+			</a>
+
+			{{#if bio}}
+				<div class="post-author-bio">
+					<p>{{bio}}</p>
+				</div>
+			{{/if}}
+
+			{{> "component/social-links-author"}}
+		</div>
+	{{/"section/section"}}
+	{{/primary_author}}
+	{{/if}}
+</article>
+
+{{#if comments}}
+<div data-popup-id="popup-comments" class="popup popup-comments" role="dialog" aria-modal="true" aria-hidden="true" aria-label="{{t "You can hide this popup with the ESC key"}}">
+	{{> "post/comments"}}
+	<button class="popup-close popup-overlay" aria-label="{{t 'Hide popup'}}"></button>
+</div>
+{{/if}}
+
+{{!-- Read next. --}}
+{{#get "posts" include="tags,tiers" filter="id:-{{id}}+tag:-hash-project" limit="4"}}
+	{{> "section/posts" title=(t "Read next") style="List"}}
+{{/get}}
+
+{{/post}}
+
+{{!-- Subscription. --}}
+{{> "section/subscription"}}

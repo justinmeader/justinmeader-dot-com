@@ -1,0 +1,20 @@
+{{!< default}}
+{{!-- The tag above means: insert everything in this file into the body of the default.hbs template --}}
+
+{{!-- Everything inside the #page block pulls data from the page. --}}
+{{#page}}
+
+	{{!-- Hero. --}}
+	{{#if @page.show_title_and_feature_image}}
+		{{> "section/hero"}}
+	{{/if}}
+
+	{{!-- Content. --}}
+	{{> "post/content"}}
+{{/page}}
+
+{{!-- Recommendations. --}}
+{{> "section/recommendations" title=(t "Recommendations") hide_title=true limit="999" style="Grid"}}
+
+{{!-- Subscription. --}}
+{{> "section/subscription"}}

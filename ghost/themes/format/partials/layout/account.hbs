@@ -1,0 +1,24 @@
+{{!-- Layout for pages "signin.hbs" and "signup.hbs" --}}
+{{#if @member}}
+	{{!-- Paid member. --}}
+	{{#if @member.paid}}
+		{{> "section/hero"
+			title=(t "Account")
+			custom_excerpt=(t "You currently have a paid subscription.")
+		}}
+
+	{{!-- Free member. --}}
+	{{else}}
+		{{> "section/hero"
+			title=(t "Account")
+			custom_excerpt=(t "You currently have a free membership, upgrade to a paid subscription for full access.")
+		}}
+	{{/if}}
+
+	<form class="container">
+		<a href="#/portal/account/" class="button">{{t 'Manage your account'}}</a>
+		<a href="javascript:" data-members-signout>{{t 'Sign out'}}</a>
+	</form>
+{{else}}
+	{{> @partial-block}}
+{{/if}}

@@ -1,0 +1,66 @@
+{{!< default}}
+{{!-- The tag above means: insert everything in this file into the body of the default.hbs template --}}
+
+{{!-- Add body class. --}}
+{{#contentFor "add-body-class"}} template-signin{{/contentFor}}
+
+{{#> "layout/account"}}
+	{{!-- Everything inside the #page block pulls data from the page. --}}
+	{{#page}}
+
+		{{!-- Hero. --}}
+		{{#if @page.show_title_and_feature_image}}
+			{{> "section/hero"}}
+		{{/if}}
+
+	{{!-- Hero default. --}}
+	{{else}}
+		{{!-- Invite only. --}}
+		{{#if @site.members_invite_only}}
+			{{> "section/hero"
+				title=(t "Sign in")
+				custom_excerpt=(t "Welcome back to our blog! Sign in to access your saved articles, personal reading list, and join the discussion.")
+			}}
+
+		{{!-- Access. --}}
+		{{else if @site.members_enabled}}
+			{{> "section/hero"
+				title=(t "Sign in")
+				custom_excerpt=(t "Sign into your account again and see the entire library of members-only content & updates.")
+			}}
+
+		{{!-- Nobody. --}}
+		{{else}}
+			{{> "section/hero"
+				title=(t "Sign in")
+				custom_excerpt=(t "Our blog's authentication system is currently under maintenance. In the meantime, you can still enjoy our public articles.")
+			}}
+		{{/if}}
+	{{/page}}
+
+	{{!-- Content. --}}
+	<div class="post-content" style="margin-top: 0">
+		{{#page}}{{{html}}}{{/page}}
+
+		{{!-- Form. --}}
+		{{#if @site.members_enabled}}
+			<form data-members-form="signin">
+				<label for="email">{{t 'Your email'}}</label>
+				<input data-members-email type="email" id="email" required />
+				<button type="submit">
+					<span class="label">{{t "Sign in"}}</span>
+					{{> "icons/loader"}}
+				</button>
+
+				<span class="form-alert">
+					<span class="success">{{t "Success! Check your inbox for our email."}}</span>
+					<span data-members-error class="error"></span>
+				</span>
+			</form>
+
+			{{^if @site.members_invite_only}}
+				<p>{{t "Don't have an account?"}} <a href="{{#match (t "/signup/") "!=" "false"}}{{t "/signup/"}}{{else}}#/portal/signup{{/match}}">{{t "Sign up"}}</a></p>
+			{{/if}}
+		{{/if}}
+	</div>
+{{/"layout/account"}}

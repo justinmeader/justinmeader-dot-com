@@ -1,0 +1,28 @@
+{{#*inline "srcset"}}
+	{{#match size "30"}}
+		{{img_url src size="30" format=format}} 30w,
+		{{img_url src size="60" format=format}} 60w
+	{{else}}
+		{{img_url src size="320" format=format}} 320w,
+		{{img_url src size="500" format=format}} 500w,
+		{{img_url src size="600" format=format}} 600w,
+		{{img_url src size="1000" format=format}} 1000w
+	{{/match}}
+{{/inline}}
+
+<picture{{#if class}} class="{{class}}"{{/if}}>
+	<source
+		srcset="{{> "srcset" format="webp"}}"
+		sizes="{{#match size "30"}}22px{{else}}(max-width: 500px) 90vw, 440px{{/match}}"
+		type="image/webp"
+	>
+	<img
+		src="{{img_url src size}}"
+		srcset="{{> "srcset"}}"
+		width="{{#match size "30"}}22{{else}}440{{/match}}"
+		height="{{#match size "30"}}22{{else}}240{{/match}}"
+		alt="{{#if alt}}{{alt}}{{else}}{{altElse}}{{/if}}"
+		sizes="{{#match size "30"}}22px{{else}}(max-width: 500px) 90vw, 440px{{/match}}"
+		loading="{{#if fast}}eager{{else}}lazy{{/if}}"
+	>
+</picture>

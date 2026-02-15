@@ -1,0 +1,76 @@
+/* stylelint-disable at-rule-no-unknown */
+
+.toggle-color-scheme-button {
+	display: flex;
+	align-items: center;
+	padding: var(--spacing-1) var(--spacing-2);
+	width: 2.25rem;
+	min-height: 1.375rem;
+	background-color: var(--color-background-300);
+	cursor: pointer;
+	border: 0;
+	border-radius: 2rem;
+	transition:
+		color 0.15s ease,
+		background-color 0.15s ease;
+
+	&:hover {
+		background-color: var(--color-background-400);
+	}
+
+	.icon {
+		position: absolute;
+		display: block;
+		width: 100%;
+		height: 100%;
+		transition: opacity 0.15s ease !important;
+	}
+
+	.icon-sun,
+	.icon-moon {
+		opacity: 0;
+	}
+
+	> span {
+		position: relative;
+		display: block;
+		width: var(--font-small);
+		height: var(--font-small);
+		transform: translateX(50%);
+		transition: transform 0.15s ease !important;
+	}
+}
+
+[data-color-scheme='light'] {
+	.toggle-color-scheme-button {
+		> span {
+			transform: translateX(0);
+		}
+
+		.icon-sun {
+			opacity: 1;
+		}
+
+		.icon-moon,
+		.icon-circle-half {
+			opacity: 0;
+		}
+	}
+}
+
+[data-color-scheme='dark'] {
+	.toggle-color-scheme-button {
+		> span {
+			transform: translateX(100%);
+		}
+
+		.icon-moon {
+			opacity: 1;
+		}
+
+		.icon-sun,
+		.icon-circle-half {
+			opacity: 0;
+		}
+	}
+}

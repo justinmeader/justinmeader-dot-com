@@ -1,0 +1,84 @@
+/* stylelint-disable at-rule-no-unknown */
+
+:has(> .tooltip) {
+	position: relative;
+	z-index: 2;
+}
+
+:hover > .tooltip {
+	opacity: 1;
+	visibility: visible;
+	transition-delay: 0.3s;
+	transform: translateX(var(--tooltip--translate-x)) translateY(0);
+}
+
+.tooltip {
+	--tooltip--offset: var(--spacing-3);
+	--tooltip--translate-x: -50%;
+	--tooltip--color: var(--color-background);
+	--tooltip--background-color: var(--color-contrast);
+	--tooltip-triangle--size: 5px;
+	--tooltip-triangle--translate-x: -50%;
+
+	position: absolute;
+	top: 100%;
+	left: 50%;
+	padding: var(--spacing-2) var(--spacing-4);
+	margin-top: var(--tooltip--offset);
+	font-size: var(--font-x-small);
+	font-weight: var(--font-weight-medium);
+	white-space: nowrap;
+	pointer-events: none;
+	text-transform: capitalize;
+	color: var(--tooltip--color);
+	line-height: 1.5;
+	background-color: var(--tooltip--background-color);
+	opacity: 0;
+	visibility: hidden;
+	border-radius: var(--radius-1);
+	transition:
+		transform 0.2s ease,
+		opacity 0.2s ease,
+		visibility 0.2s ease;
+	transform: translate(var(--tooltip--translate-x), 1px);
+	z-index: 3;
+
+	/* Triangle. */
+	&::before {
+		content: '';
+		position: absolute;
+		top: calc(var(--tooltip-triangle--size) * -1);
+		left: 50%;
+		width: 0;
+		height: 0;
+		border-left: var(--tooltip-triangle--size) solid transparent;
+		border-right: var(--tooltip-triangle--size) solid transparent;
+		border-bottom: var(--tooltip-triangle--size) solid
+			var(--tooltip--background-color);
+		transform: translate(var(--tooltip-triangle--translate-x), 1px);
+	}
+
+	&.show {
+		opacity: 1;
+		visibility: visible;
+		transition-delay: 0s;
+		transform: translate(var(--tooltip--translate-x), 0);
+	}
+}
+
+.tooltip-top {
+	top: auto;
+	bottom: 100%;
+	margin-top: 0;
+	margin-bottom: var(--tooltip--offset);
+	transform: translate(var(--tooltip--translate-x), -1px);
+
+	&::before {
+		top: auto;
+		bottom: calc(var(--tooltip-triangle--size) * -1);
+		border-top: var(--tooltip-triangle--size) solid
+			var(--tooltip--background-color);
+		border-bottom: 0;
+		transform: translate(var(--tooltip-triangle--translate-x), -1px);
+	}
+}

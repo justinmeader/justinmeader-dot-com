@@ -1,0 +1,6 @@
+@custom-media --breakpoint-2xl not all and (min-width: 1400px);
+@custom-media --breakpoint-xl not all and (min-width: 1200px);
+@custom-media --breakpoint-lg not all and (min-width: 992px);
+@custom-media --breakpoint-md not all and (min-width: 768px);
+@custom-media --breakpoint-sm not all and (min-width: 540px);
+@custom-media --breakpoint-xs not all and (min-width: 440px);

@@ -1,0 +1,29 @@
+.footer {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--spacing-6);
+	width: calc(var(--container--width) + var(--padding-h) * 2);
+	max-width: 100%;
+	margin: var(--spacing-10) auto 0;
+	padding: 0 var(--padding-h);
+}
+
+.footer-bottom {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	width: 100%;
+	gap: var(--spacing-5);
+
+	> .toggle-color-scheme-button {
+		order: 1;
+		flex: 0 0 auto;
+	}
+}
+
+.footer-copyright {
+	flex-basis: 0;
+	flex-grow: 1;
+	font-size: var(--font-small);
+}

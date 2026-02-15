@@ -1,0 +1,193 @@
+/* stylelint-disable at-rule-no-unknown */
+
+.card {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-5);
+	z-index: 1;
+}
+
+/* Header. */
+.card-header {
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-1);
+}
+
+/* Image (for card author and recommendation). */
+.card-image {
+	flex: 0 0 auto;
+
+	img {
+		width: 22px;
+		height: 22px;
+		object-fit: cover;
+		border-radius: 50%;
+	}
+}
+
+/* Title. */
+.card-title {
+	@mixin heading-6;
+
+	> a {
+		display: block;
+	}
+
+	> a:not(:hover) {
+		text-decoration-color: transparent;
+	}
+}
+
+/* Meta. */
+.card-meta {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--spacing-1) var(--spacing-3);
+	color: var(--color-secondary);
+	font-size: var(--font-x-small);
+	font-weight: var(--font-weight-medium);
+}
+
+/* Count. */
+.card-count {
+	margin-left: auto;
+	color: var(--color-secondary);
+	font-size: var(--font-x-small);
+	font-weight: var(--font-weight-medium);
+}
+
+/* Primary tag. */
+.card-primary-tag:not(:hover) {
+	color: var(--color-secondary);
+	text-decoration-color: transparent;
+}
+
+/* Content. */
+.card-content {
+	font-size: var(--font-small);
+
+	p {
+		margin-bottom: 0;
+	}
+}
+
+/* Footer. */
+.card-footer {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--spacing-3);
+	padding: var(--spacing-2) 0;
+}
+
+/* Icon. */
+.card-icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: var(--spacing-3);
+	width: var(--button-xs--min-height);
+	height: var(--button-xs--min-height);
+	color: var(--color-contrast);
+	background-color: var(--color-background-300);
+	border-radius: var(--radius-1);
+
+	svg {
+		display: block;
+	}
+
+	.tooltip {
+		--tooltip--translate-x: 0;
+		--tooltip-triangle--translate-x: 0;
+
+		left: 0;
+
+		&::before {
+			left: var(--spacing-4);
+		}
+	}
+}
+
+/* Recommendation. */
+.card-recommendation {
+	position: relative;
+
+	.card-title > a {
+		display: inline;
+	}
+
+	.card-header {
+		flex-direction: row;
+		gap: var(--spacing-1) var(--spacing-4);
+	}
+
+	.card-image {
+		display: inline;
+		float: left;
+		margin-right: var(--spacing-4);
+		margin-top: calc(var(--spacing-1) * -0.5);
+		margin-bottom: calc(var(--spacing-1) * -0.5);
+	}
+
+	.card-image img {
+		border-radius: var(--radius-1);
+	}
+
+	.card-image + .card-title {
+		padding-top: var(--spacing-1);
+	}
+}
+
+/* Author and tag. */
+.card-author,
+.card-tag {
+	.card-header {
+		flex-flow: wrap;
+		flex-direction: row;
+		align-items: center;
+		gap: var(--spacing-1) var(--spacing-4);
+	}
+
+	.card-image + .card-title {
+		position: relative;
+	}
+
+	.card-image + .card-title > a::before {
+		content: '';
+		position: absolute;
+		inset: 0 0 0 calc(22px * -1 - var(--spacing-4));
+	}
+}
+
+/* Minimal. */
+.card-minimal {
+	align-items: flex-start;
+	flex-direction: row;
+
+	> span {
+		display: flex;
+		padding-top: var(--spacing-1);
+		margin-left: auto;
+	}
+
+	.card-date {
+		flex: 0 0 auto;
+		color: var(--color-secondary);
+		font-size: var(--font-x-small);
+		font-weight: var(--font-weight-medium);
+		white-space: nowrap;
+	}
+
+	.tooltip {
+		--tooltip--translate-x: 0;
+
+		left: auto;
+		right: 0;
+
+		&::before {
+			left: auto;
+			right: var(--spacing-2);
+		}
+	}
+}
