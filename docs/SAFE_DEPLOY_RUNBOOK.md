@@ -16,6 +16,52 @@
 
 ---
 
+## Operator Mode
+
+**Quick operational flows for common scenarios. For detailed procedures, see sections below.**
+
+### Flow 1: Normal Change (Safe Path)
+
+**For theme code or config changes. Content-only changes skip to verification.**
+
+- [ ] **Preflight:** Verify production state (`curl -I https://justinmeader.com`)
+- [ ] **Backup:** Create timestamped backup (`ghost backup --file "pre-deploy-$(date +%Y%m%d-%H%M%S).json"`)
+- [ ] **Branch:** Create feature branch (`git checkout -b feature/change-name`)
+- [ ] **Change:** Make code changes in `ghost/themes/format/`
+- [ ] **Test:** Run local tests (`npm test`)
+- [ ] **PR:** Open PR, wait for CI green (`gh pr create`, wait for Playwright tests)
+- [ ] **Merge:** Squash merge to main (`gh pr merge --squash`)
+- [ ] **Deploy:** Upload theme via Ghost Admin or SSH/SFTP
+- [ ] **Restart:** If needed, restart Ghost (`sudo ghost restart`)
+- [ ] **Verify:** Run smoke tests (`npm test`), check homepage/posts/console
+- [ ] **Monitor:** Check Ghost logs for 5 minutes (`sudo ghost log`)
+
+**Abort criteria:** CI fails, tests fail, backup missing → stop and fix before proceeding.
+
+### Flow 2: Break-Glass Rollback
+
+**For immediate production issues. Skip ceremony, restore stability.**
+
+- [ ] **Assess:** Identify failure type (theme break / content loss / service down / SSL issue)
+- [ ] **Theme break:** Restore theme backup
+  ```bash
+  ssh root@justinmeader.com-ghost
+  cd /var/www/ghost/content/themes
+  sudo tar -xzf format-backup-[latest].tar.gz
+  sudo chown -R ghost:ghost format
+  sudo ghost restart
+  ```
+- [ ] **Content loss:** Import latest backup via Ghost Admin → Settings → Labs → Import
+- [ ] **Service down:** Restart Ghost (`sudo ghost restart`), check logs (`sudo ghost log`)
+- [ ] **SSL issues:** Renew cert (`sudo certbot renew --force-renewal`), restart Nginx
+- [ ] **Verify:** Check homepage loads (`curl -I https://justinmeader.com`)
+- [ ] **Document:** Log incident details for postmortem
+- [ ] **Fix forward:** Create issue, schedule proper fix after stability restored
+
+**Success criteria:** Site responds 200, no console errors, Ghost service stable.
+
+---
+
 ## Preflight Checks
 
 ### Before ANY deployment:

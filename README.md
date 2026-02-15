@@ -76,6 +76,7 @@ The active theme is located in `ghost/themes/format/`. Changes should be tested 
 **⚠️ READ FIRST:** See [Safe Deployment Runbook](docs/SAFE_DEPLOY_RUNBOOK.md) for complete operational procedures.
 
 **Quick Links:**
+- [Operator Mode](docs/SAFE_DEPLOY_RUNBOOK.md#operator-mode) — checkbox flows for normal changes and break-glass rollbacks
 - [Preflight checks](docs/SAFE_DEPLOY_RUNBOOK.md#preflight-checks) — verify before deploying
 - [Change paths](docs/SAFE_DEPLOY_RUNBOOK.md#change-paths) — content vs theme vs config
 - [Rollback procedures](docs/SAFE_DEPLOY_RUNBOOK.md#incident-quick-response) — emergency recovery
